@@ -1,0 +1,45 @@
+{
+ "dataset": "m4",
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "n_test": 23288,
+ "arms": {
+  "regimix": {
+   "logloss": 0.5878102016464097
+  },
+  "insample_platt": {
+   "logloss": 0.5869869743308563,
+   "paired_ours_minus_arm": {
+    "method": "cluster bootstrap over 414 series",
+    "n_units": 414,
+    "mean": 0.000823227315553542,
+    "se": 4.5006320496512056e-05,
+    "ci95": [
+     0.0007338891090876733,
+     0.0009106936023113349
+    ],
+    "n": 23288,
+    "z": 18.29137122234512
+   }
+  },
+  "no_calibration": {
+   "logloss": 0.6027549247202086,
+   "paired_ours_minus_arm": {
+    "method": "cluster bootstrap over 414 series",
+    "n_units": 414,
+    "mean": -0.014944723073798854,
+    "se": 0.0009465190259170867,
+    "ci95": [
+     -0.016821501309324707,
+     -0.013145658194718619
+    ],
+    "n": 23288,
+    "z": -15.789141754777557
+   }
+  }
+ },
+ "wall_s": 167.5
+}

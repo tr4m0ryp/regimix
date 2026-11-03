@@ -141,6 +141,17 @@ def variant_numbers(o, key, fname, vj):
             o.add(f"{key}Small{n}Vs{ARMS[arm]}SE", f4(c["se"]), f"{path}: small_n[{row['n_train']}].ours_minus.{arm}.se")
 
 
+def calib_numbers(o, key, fname):
+    """Calibration ablation from paper/results/ablate_calib.py (regimix minus in-sample Platt / no calibration)."""
+    path = HERE / f"calib_{fname}.json"
+    cj = json.loads(path.read_text())
+    for arm, code in (("insample_platt", "InPlatt"), ("no_calibration", "NoCal")):
+        pr = cj["arms"][arm]["paired_ours_minus_arm"]
+        src = f"paper/results/calib_{fname}.json: arms.{arm}.paired_ours_minus_arm"
+        o.add(f"{key}{code}D", sgn(pr["mean"]), src + ".mean")
+        o.add(f"{key}{code}SE", f4(pr["se"]), src + ".se")
+
+
 def config_numbers(o, results: Path):
     """Setup constants the prose cites (defaults, lookbacks, offsets, counts), each read from its source."""
     import inspect
@@ -220,6 +231,7 @@ def main():
         npz = np.load(a.preds / f"{dsname}_test_logits.npz")
         main_numbers(o, key, fname, js, npz, mode, paired)
         variant_numbers(o, key, fname, json.loads((a.results / f"{fname}_variants.json").read_text()))
+        calib_numbers(o, key, fname)
         o.lines.append("")
     config_numbers(o, a.results)
     o.lines.append("")

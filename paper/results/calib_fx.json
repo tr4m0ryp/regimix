@@ -1,0 +1,47 @@
+{
+ "dataset": "fx",
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "n_test": 13078,
+ "arms": {
+  "regimix": {
+   "logloss": 0.6200944441650432
+  },
+  "insample_platt": {
+   "logloss": 0.6200976698297187,
+   "paired_ours_minus_arm": {
+    "method": "moving-block bootstrap over 749 time blocks, block length 10",
+    "n_units": 749,
+    "mean": -3.2256646753742066e-06,
+    "se": 9.855109148646992e-07,
+    "ci95": [
+     -5.243267403600199e-06,
+     -1.3358200213323068e-06
+    ],
+    "n": 13078,
+    "z": -3.273088736736171,
+    "hac_se_block_means": 1.1935044371251559e-06
+   }
+  },
+  "no_calibration": {
+   "logloss": 0.6192954909630914,
+   "paired_ours_minus_arm": {
+    "method": "moving-block bootstrap over 749 time blocks, block length 10",
+    "n_units": 749,
+    "mean": 0.0007989532019518539,
+    "se": 0.00043262686625145276,
+    "ci95": [
+     -1.0608661607325705e-05,
+     0.0017115809856324043
+    ],
+    "n": 13078,
+    "z": 1.8467489291048416,
+    "hac_se_block_means": 0.0005150115444994095
+   }
+  }
+ },
+ "wall_s": 96.7
+}

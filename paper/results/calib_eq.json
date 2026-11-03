@@ -1,0 +1,47 @@
+{
+ "dataset": "eq",
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "n_test": 22125,
+ "arms": {
+  "regimix": {
+   "logloss": 0.6504727858190601
+  },
+  "insample_platt": {
+   "logloss": 0.6508691708189088,
+   "paired_ours_minus_arm": {
+    "method": "moving-block bootstrap over 1500 time blocks, block length 12",
+    "n_units": 1500,
+    "mean": -0.0003963849998486312,
+    "se": 7.383980493662863e-05,
+    "ci95": [
+     -0.0005378061172915657,
+     -0.00025212546018037527
+    ],
+    "n": 22125,
+    "z": -5.368175067483179,
+    "hac_se_block_means": 7.53588439162047e-05
+   }
+  },
+  "no_calibration": {
+   "logloss": 0.6556266453503206,
+   "paired_ours_minus_arm": {
+    "method": "moving-block bootstrap over 1500 time blocks, block length 12",
+    "n_units": 1500,
+    "mean": -0.005153859531260362,
+    "se": 0.00324468173975672,
+    "ci95": [
+     -0.011427660438436075,
+     0.001387031236404308
+    ],
+    "n": 22125,
+    "z": -1.5884021745833194,
+    "hac_se_block_means": 0.0033627183049347587
+   }
+  }
+ },
+ "wall_s": 156.1
+}

@@ -40,12 +40,12 @@
 \maketitle
 
 \begin{abstract}
-We want the probability that a process ends above a threshold, given part of a path whose spread switches between levels.
-We release \texttt{regimix}: a hidden Markov model (unobserved switching states) fitted without labels to scaled recent increments, whose filtered state weights mix per-state Gaussian tail probabilities; it fixes a variance-floor bug in hmmlearn 0.3.3.
+We want the probability that a process ends above a threshold, given a path whose spread switches between levels.
+\texttt{regimix} fits a hidden Markov model (unobserved switching states) without labels to scaled recent increments and mixes per-state Gaussian tail probabilities by the filtered state weights; it fixes a variance-floor bug in hmmlearn 0.3.3.
 The finding is negative: the states beat a one-state model but not a plain volatility estimate.
-On \nFxNTest{} held-out EUR/USD 1-minute episodes, regimix ($K=\nCfgK$) beats the one-state pooled probit by \nFxKoneAbsD{} nats of log-loss (paired block-bootstrap SE \nFxKoneSE), ties a realised-volatility probit (\nFxRvD, SE \nFxRvSE; positive means regimix is worse) and loses to a HAR-style probit (\nFxHarD, SE \nFxHarSE); pristine hmmlearn 0.3.3 EM gives identical numbers.
+On \nFxNTest{} held-out EUR/USD 1-minute episodes, regimix ($K=\nCfgK$) minus arm in log-loss is \nFxKoneD{} nats for the one-state pooled probit (paired block-bootstrap SE \nFxKoneSE; negative favours regimix), \nFxRvD{} (SE \nFxRvSE, a tie) for a realised-volatility probit and \nFxHarD{} (SE \nFxHarSE, a loss) for a HAR-style probit; pristine hmmlearn EM is identical.
 On all \nCfgNData{} public datasets it ties or loses to the best volatility probit, and its outputs never improve gradient boosting (\nFxStackD{} / \nEqStackD{} / \nMfStackD{} nats, SE \nFxStackSE{} / \nEqStackSE{} / \nMfStackSE).
-SEs bootstrap over time blocks or series; one held-out tail per dataset.
+SEs bootstrap time blocks or series of each dataset's last \nCfgTestPct\,\%.
 \end{abstract}
 
 \section{Problem}
@@ -62,8 +62,7 @@ The plain answer is a probit, a Gaussian tail probability whose width comes from
 
 We expected a filtered regime, read off a few lookback windows, to react within one window and beat a slow volatility estimate.
 The filter is Hamilton's \citep{hamilton1989} and the regime-weighted normal tail is standard in regime-switching return models \citep{hardy2001}; we claim neither.
-The delta is a label-free fit over many short episodes instead of one long series, a cross-fitted calibration, a variance-floor fix to the upstream library \citep{hmmlearn}, and diagnostics that say when the regimes are not real.
-The result is mostly negative, and we report it as such.
+The delta is how the parts are combined and checked: one label-free HMM fitted on the lookback windows of many short episodes, a calibration fitted on out-of-fold outputs, a variance-floor fix to the upstream library \citep{hmmlearn}, and diagnostics that say when the regimes are not real.
 
 \section{The change}
 \label{sec:change}
@@ -147,7 +146,7 @@ All arms see the same training rows, segments, distances and horizons, and we gi
 No arm gets a hyperparameter search: each runs fixed settings written down before the run.
 \emph{regimix} runs its defaults ($K=\nCfgK$, \texttt{n\_iter} \nCfgNIter, \texttt{tol} \nCfgTol, floor and next-step weighting $w_i=\alpha_{i,S}A$ on, drift off), and the \emph{one-regime pooled probit}, our trivial baseline, is the same model with $K=\nCfgKone$: one constant spread.
 The \emph{realised-vol probit} uses the realised variance per unit time over the lookback; the \emph{HAR-style probit} (heterogeneous autoregressive volatility) regresses log realised variance over the horizon on its value at each lookback window \citep{corsi2009,andersen2003}.
-The \emph{gate ablation} replaces $w_i$ by a one-hot weight on the high-spread state when $|z_{i,S}|$ exceeds the training quantile that matches that state's stationary share.
+The \emph{gate ablation} replaces $w_i$ by a one-hot weight on the high-spread state when $|z_{i,S}|$ exceeds the training quantile that matches that state's stationary share (its long-run fraction of segments under $A$).
 \emph{Logistic regression} and \emph{histogram gradient boosting} \citep{pedregosa2011} get $(Z,|Z|,d,\tau,d/\sqrt\tau)$.
 \emph{Pristine hmmlearn EM} is the upstream 0.3.3 M-step \citep{hmmlearn} without the floor (our batched E-step matches upstream to $10^{-14}$), and the stacking test \citep{wolpert1992} appends out-of-fold $w_i$ and $\operatorname{logit}\tilde p_i$ to the boosting inputs.
 
@@ -164,7 +163,7 @@ M4 series are independent, so there we resample \nMfNUnits{} whole series (a New
 We call a difference a tie when its \nCfgCI\,\% interval covers zero.
 Calibration is the expected calibration error over \nCfgBins{} bins (ECE, the mean gap between predicted and observed frequency) \citep{guo2017}.
 The \nCfgNArms{} arms of the main run were written down before any held-out number existed.
-After the main run lost to the volatility probits we tried \nCfgNVariants{} post-hoc variants on the same tail, about \nCfgNPostCmp{} comparisons, and kept a variant only if it won on all \nCfgNData{} datasets.
+After the main run lost to the volatility probits we tried \nCfgNVariants{} post-hoc variants on the same held-out period, about \nCfgNPostCmp{} comparisons, and kept a variant only if it won on all \nCfgNData{} datasets.
 
 \section{Results}
 \label{sec:results}
@@ -182,7 +181,7 @@ The realised-vol probit is a tie (\nFxRvD, interval \nFxRvLo{} to \nFxRvHi) and 
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
-arm & EUR/USD 1-min & US large-cap daily & M4 hourly \\
+arm & EUR/USD 1-min ($n=\text{\nFxNTest}$) & US large-cap daily ($n=\text{\nEqNTest}$) & M4 hourly ($n=\text{\nMfNTest}$) \\
 \midrule
 regimix ($K=\nCfgK$) & \textbf{\nFxOursLL} & \textbf{\nEqOursLL} & \textbf{\nMfOursLL} \\
 pooled probit ($K=\nCfgKone$) & \nFxKoneLL{} (\nFxKoneD{} $\pm$ \nFxKoneSE) & \nEqKoneLL{} (\nEqKoneD{} $\pm$ \nEqKoneSE) & \nMfKoneLL{} (\nMfKoneD{} $\pm$ \nMfKoneSE) \\
@@ -201,11 +200,11 @@ boosting $+$ regime $-$ boosting & \nFxStackD{} $\pm$ \nFxStackSE & \nEqStackD{}
 On equities (Figure~\ref{fig:paired}) the regimes pass both warnings (dwell \nEqDwellA{} / \nEqDwellB, spread ratio \nEqSpreadRatio), yet every probit lands within \nEqHarAbsD{} nats of regimix.
 On M4 the diagnostics warn on both counts (dwell \nMfDwellA{} / \nMfDwellB{} segments, spread ratio \nMfSpreadRatio), and M4 is exactly where regimix loses to $K=\nCfgKone$, by \nMfKoneAbsD{} nats.
 We count its edge over the HAR probit there (\nMfHarD, interval \nMfHarLo{} to \nMfHarHi) as a tie.
-On M4 logistic regression and boosting reach \nMfLogregLL{} and \nMfHgbLL{}, far below every probit, which we attribute to daily seasonality and mean reversion that a driftless random walk cannot express.
+On M4 logistic regression and boosting reach \nMfLogregLL{} and \nMfHgbLL{}, far below every probit, which we attribute, without a test, to daily seasonality and mean reversion that a driftless random walk cannot express; M4 therefore ranks regimix only among probits.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.74\linewidth]{figures/fig1_paired.pdf}
+\includegraphics[width=0.70\linewidth]{figures/fig1_paired.pdf}
 \caption{The volatility probits match or beat regimix on every dataset, and the regime outputs never help boosting. Paired held-out log-loss difference, regimix minus arm, \nCfgCI\,\% block or (M4) series bootstrap intervals; blue a regimix win, red a loss, grey a tie, purple stacking.}
 \label{fig:paired}
 \end{figure}
@@ -216,19 +215,20 @@ Calibration follows the same order (Figure~\ref{fig:reliability}; ECE gaps untes
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.6\linewidth]{figures/fig2_reliability.pdf}
+\includegraphics[width=0.56\linewidth]{figures/fig2_reliability.pdf}
 \caption{Regimix has a lower ECE than the pooled probit where regimes exist and a higher one on M4, where they do not. Reliability diagrams of the seed-averaged held-out probabilities, \nCfgBins{} bins, sparse bins hidden; the legend gives each arm's ECE.}
 \label{fig:reliability}
 \end{figure}
 
-Of the single-default ablations (Table~\ref{tab:ablation}, Appendix~\ref{app:variants}) only $K=\nCfgKthree$ helps, still short of the volatility probits; we keep $K=\nCfgK$ because $K=\nCfgKthree$ was picked on the held-out tail. No post-hoc variant won on all \nCfgNData{} datasets.
+Of the single-default ablations (Table~\ref{tab:ablation}, Appendix~\ref{app:variants}) only $K=\nCfgKthree$ helps, still short of the volatility probits; we keep $K=\nCfgK$ because $K=\nCfgKthree$ was picked on the held-out period, and no post-hoc variant won on all \nCfgNData{} datasets.
+Out-of-fold calibration, ablated after the main run, is no clear gain over in-sample Platt (regimix minus it: \nFxInPlattD, \nEqInPlattD, \nMfInPlattD), while dropping calibration costs most on M4 (\nMfNoCalD{} $\pm$ \nMfNoCalSE).
 
 \section{Limits}
 \label{sec:limits}
 
-The idea lost a comparison and stays open: a realised-volatility probit needs no hidden states and fits two calibration parameters, so it meets every constraint we set, and here it reads the current volatility level as well as the states do.
+The idea lost a comparison and stays open: a realised-volatility probit, with no hidden states and the same two calibration parameters, reads the current volatility level as well as the states do.
 To beat it, the states must carry what the level misses, such as a switch inside the horizon \citep{hardy2001}, which regimix does not model.
-The evidence is thin: one held-out tail per dataset, \nFxSeeds{} seeds, post-hoc variants on that tail, a floor with only synthetic evidence, survivorship bias in the equities, M4 rows that speak only about probits, a drift unit mismatch (Appendix~\ref{app:variants}), and no ablation of the out-of-fold calibration or the pooled fit.
+The evidence is thin: one held-out period per dataset, \nFxSeeds{} seeds, post-hoc variants on that period, a floor with only synthetic evidence, survivorship bias in the equities (only today's large caps), a drift unit mismatch (Appendix~\ref{app:variants}), and no ablation of fitting one HMM on all episodes.
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
@@ -269,7 +269,7 @@ P(E\mid r=j) &= P\!\left(\tfrac{U-\mu_j\tau_i}{\sigma_j\sqrt{\tau_i}} > \tfrac{-
 \textbf{Need to prove:} $p_i$ depends on labels only through $\{y_j\}_{j\in\text{train}}$.
 \begin{align*}
 p_i &= g(z_i,d_i,\tau_i;\,\theta,\,a,\,b) && \text{rule 3}\\
-    &= g\big(z_i,d_i,\tau_i;\,\mathrm{fit}(Z_{\text{train}}),\,\mathrm{Platt}(\{\tilde p_j^{\text{oof}},y_j\}_{j\in\text{train}})\big) && \text{rules 1 and 2}
+    &= g\big(z_i,d_i,\tau_i;\,\mathrm{fit}(Z_{\text{train}}),\,\mathrm{Platt}(\{\operatorname{logit}\tilde p_j^{\text{oof}},y_j\}_{j\in\text{train}})\big) && \text{rules 1 and 2}
 \end{align*}
 The only label symbols on the right are $y_j$ with $j\in\text{train}$.
 
@@ -326,7 +326,7 @@ On \nCfgReproSeqs{} sequences of length \nCfgReproLen{} drawn as rounded $\mathc
 \begin{table}[h]
 \centering
 \small
-\caption{No single default carries the method, and the floors never bind on public data. Regimix minus the ablated arm, log-loss in nats $\pm$ paired SE; a positive value means the ablated arm is better.}
+\caption{No single default carries the method, the floors never bind on public data, and calibration matters most where regimes are not real (M4). Regimix minus the ablated arm, log-loss in nats $\pm$ paired SE; a positive value means the ablated arm is better.}
 \label{tab:ablation}
 \footnotesize
 \begin{tabular}{lccc}
@@ -340,12 +340,14 @@ $\sigma_{\min}$ off & \nFxSigOffD{} $\pm$ \nFxSigOffSE & \nEqSigOffD{} $\pm$ \nE
 drift on & \nFxDriftOnD{} $\pm$ \nFxDriftOnSE & \nEqDriftOnD{} $\pm$ \nEqDriftOnSE & \nMfDriftOnD{} $\pm$ \nMfDriftOnSE \\
 isotonic calibration & \nFxIsoD{} $\pm$ \nFxIsoSE & \nEqIsoD{} $\pm$ \nEqIsoSE & \nMfIsoD{} $\pm$ \nMfIsoSE \\
 per-regime Platt & \nFxPlattStateD{} $\pm$ \nFxPlattStateSE & \nEqPlattStateD{} $\pm$ \nEqPlattStateSE & \nMfPlattStateD{} $\pm$ \nMfPlattStateSE \\
+in-sample Platt & \nFxInPlattD{} $\pm$ \nFxInPlattSE & \nEqInPlattD{} $\pm$ \nEqInPlattSE & \nMfInPlattD{} $\pm$ \nMfInPlattSE \\
+no calibration & \nFxNoCalD{} $\pm$ \nFxNoCalSE & \nEqNoCalD{} $\pm$ \nEqNoCalSE & \nMfNoCalD{} $\pm$ \nMfNoCalSE \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 
-All \nCfgNVariants{} variants were tried after the main run, on the same held-out tail.
+All \nCfgNVariants{} variants were tried after the main run, on the same held-out period.
 Values are variant minus the named arm, $\pm$ paired SE (negative: the variant is better).
 The level-relative variants divide segments and distance by the realised-vol or HAR level, so the regimes model only the change around it.
 
@@ -365,10 +367,10 @@ rv-relative, $K=\nCfgKthree$ & realised vol & \nFxRvRelKthreeVsRvD{} $\pm$ \nFxR
 HAR-relative, $K=\nCfgK$ & HAR & \nFxHarRelKtwoVsHarD{} $\pm$ \nFxHarRelKtwoVsHarSE & \nEqHarRelKtwoVsHarD{} $\pm$ \nEqHarRelKtwoVsHarSE & \nMfHarRelKtwoVsHarD{} $\pm$ \nMfHarRelKtwoVsHarSE \\
 HAR-relative, $K=\nCfgKthree$ & HAR & \nFxHarRelKthreeVsHarD{} $\pm$ \nFxHarRelKthreeVsHarSE & \nEqHarRelKthreeVsHarD{} $\pm$ \nEqHarRelKthreeVsHarSE & \nMfHarRelKthreeVsHarD{} $\pm$ \nMfHarRelKthreeVsHarSE \\
 \midrule
-$n=\nCfgSmallA$ & realised vol & \nFxSmallThreeVsRvD{} $\pm$ \nFxSmallThreeVsRvSE & \nEqSmallThreeVsRvD{} $\pm$ \nEqSmallThreeVsRvSE & \nMfSmallThreeVsRvD{} $\pm$ \nMfSmallThreeVsRvSE \\
-$n=\nCfgSmallB$ & realised vol & \nFxSmallThousandVsRvD{} $\pm$ \nFxSmallThousandVsRvSE & \nEqSmallThousandVsRvD{} $\pm$ \nEqSmallThousandVsRvSE & \nMfSmallThousandVsRvD{} $\pm$ \nMfSmallThousandVsRvSE \\
-$n=\nCfgSmallC$ & realised vol & \nFxSmallThreeThousandVsRvD{} $\pm$ \nFxSmallThreeThousandVsRvSE & \nEqSmallThreeThousandVsRvD{} $\pm$ \nEqSmallThreeThousandVsRvSE & \nMfSmallThreeThousandVsRvD{} $\pm$ \nMfSmallThreeThousandVsRvSE \\
-$n=\nCfgSmallA$ & boosting & \nFxSmallThreeVsHgbD{} $\pm$ \nFxSmallThreeVsHgbSE & \nEqSmallThreeVsHgbD{} $\pm$ \nEqSmallThreeVsHgbSE & \nMfSmallThreeVsHgbD{} $\pm$ \nMfSmallThreeVsHgbSE \\
+$n=\text{\nCfgSmallA}$ & realised vol & \nFxSmallThreeVsRvD{} $\pm$ \nFxSmallThreeVsRvSE & \nEqSmallThreeVsRvD{} $\pm$ \nEqSmallThreeVsRvSE & \nMfSmallThreeVsRvD{} $\pm$ \nMfSmallThreeVsRvSE \\
+$n=\text{\nCfgSmallB}$ & realised vol & \nFxSmallThousandVsRvD{} $\pm$ \nFxSmallThousandVsRvSE & \nEqSmallThousandVsRvD{} $\pm$ \nEqSmallThousandVsRvSE & \nMfSmallThousandVsRvD{} $\pm$ \nMfSmallThousandVsRvSE \\
+$n=\text{\nCfgSmallC}$ & realised vol & \nFxSmallThreeThousandVsRvD{} $\pm$ \nFxSmallThreeThousandVsRvSE & \nEqSmallThreeThousandVsRvD{} $\pm$ \nEqSmallThreeThousandVsRvSE & \nMfSmallThreeThousandVsRvD{} $\pm$ \nMfSmallThreeThousandVsRvSE \\
+$n=\text{\nCfgSmallA}$ & boosting & \nFxSmallThreeVsHgbD{} $\pm$ \nFxSmallThreeVsHgbSE & \nEqSmallThreeVsHgbD{} $\pm$ \nEqSmallThreeVsHgbSE & \nMfSmallThreeVsHgbD{} $\pm$ \nMfSmallThreeVsHgbSE \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -402,6 +404,6 @@ Always run a realised-vol probit beside it: on our data it was the arm to beat.
 Package, benchmark and paper live in the \texttt{regimix} repository; the results in \texttt{bench/results/} are from commit \texttt{a6e9ca4}.
 The whole delta to upstream is \texttt{patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch} (and a spherical-shape fix, \texttt{0002}) against hmmlearn 0.3.3, with repro tests in \texttt{patches/hmmlearn/tests}.
 \texttt{bash bench/run\_all.sh} downloads the data and writes \texttt{bench/results/\{fx,eq,m4\}[\_variants].json} (about 1 hour on 2 threads);
-\texttt{python results/make\_numbers.py} regenerates every number in this paper and \texttt{python figures/make.py} both figures (Figure~\ref{fig:reliability} reads the held-out predictions the benchmark stores outside git).
+\texttt{python -m paper.results.ablate\_calib \{fx,eq,m4\}} writes the calibration ablation to \texttt{paper/results/calib\_*.json}, \texttt{python results/make\_numbers.py} regenerates every number in this paper and \texttt{python figures/make.py} both figures (Figure~\ref{fig:reliability} reads the held-out predictions the benchmark stores outside git).
 
 \end{document}
