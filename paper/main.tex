@@ -43,7 +43,7 @@
 \texttt{regimix} gives the probability that a process ends above a threshold, from a path whose spread switches between levels, by fitting a hidden Markov model (unobserved switching states) without labels and mixing per-state Gaussian tail probabilities.
 What it offers is engineering, not a better forecast: two fixes to hmmlearn 0.3.3 (\texttt{min\_covar} is not applied in the M-step, so a variance silently collapses to \nReproFloorFrac{} times the floor on a synthetic repro; spherical \texttt{covars\_} has the wrong shape), a batched Baum--Welch that fits \nSpeedNC{} short sequences \nSpeedC$\times$ faster than hmmlearn with the same estimates, and diagnostics that warn when the regimes are not real.
 As a forecaster it ties a plain realised-volatility probit on all \nCfgNData{} public datasets (EUR/USD: \nFxRvD{} nats, SE \nFxRvSE) and loses to a HAR-style probit on EUR/USD (\nFxHarD, SE \nFxHarSE).
-It beats only a one-state probit, and only on EUR/USD (\nFxKoneD{} nats, SE \nFxKoneSE, on \nFxNTest{} held-out episodes; negative favours regimix); on equities that is a tie and on M4, where the diagnostics warn, a loss.
+Against a one-state probit it wins only on EUR/USD (\nFxKoneD{} nats, SE \nFxKoneSE, on \nFxNTest{} held-out episodes; negative favours regimix); on equities that is a tie and on M4, where the diagnostics warn, a loss.
 Its outputs never improve gradient boosting, and the floor never binds on the public data, so pristine hmmlearn EM gives identical results there.
 \end{abstract}
 
@@ -61,7 +61,7 @@ The plain answer is a probit, a Gaussian tail probability whose width comes from
 
 A filtered regime, read off a few lookback windows, should react within one window.
 The filter is Hamilton's \citep{hamilton1989} and the regime-weighted normal tail is standard in regime-switching return models \citep{hardy2001}; we claim neither.
-The delta is two fixes to the upstream library \citep{hmmlearn}, a batched Baum--Welch over many short episodes, one label-free HMM on all their lookback windows, an out-of-fold calibration, and diagnostics that say when the regimes are not real.
+The delta is two fixes to the upstream library \citep{hmmlearn}, a batched Baum--Welch over many short episodes, one label-free HMM on all their lookback windows, and diagnostics that say when the regimes are not real; the out-of-fold calibration is a design choice with no measured gain (Section~\ref{sec:results}).
 The expectation failed: a realised-volatility probit ties regimix on every dataset.
 
 \section{The change}

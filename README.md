@@ -8,7 +8,7 @@
 **Two hmmlearn 0.3.3 fixes (a silent variance collapse in the M-step, the wrong shape of spherical `covars_`), a
 batched HMM fit that runs 130x faster than hmmlearn on 10^5 short paths with the same estimates, and diagnostics
 that tell you when the regimes are fake. As a forecaster it has no edge: it ties a plain realised-volatility
-probit on all three public datasets, and beats only a one-regime probit, on EUR/USD only (-0.0079 nats, SE
+probit on all three public datasets and beats the one-regime probit on EUR/USD only (-0.0079 nats, SE
 0.0014).**
 
 ```bash
@@ -75,7 +75,8 @@ flowchart LR
   H --> D[diagnostics: are modes real?]
 ```
 
-What it found: the modes do help over a model that assumes one fixed spread. But a plain "how jumpy has it been
+What it found: on EUR/USD the modes help over a model that assumes one fixed spread (on equities that is a tie,
+on M4 a loss). But a plain "how jumpy has it been
 lately?" estimate does just as well, and on EUR/USD a HAR-style version of it does better. Our reading, not
 tested, is that two modes are a coarse copy of a smooth volatility level.
 
@@ -153,7 +154,7 @@ regimix is better.**
   is the synthetic repro in `patches/hmmlearn/`: stock hmmlearn ends at 0.002x its own floor.
 - **Speed** (`bench/results/speed.json`, synthetic 5-segment sequences, 10 EM iterations, one thread): the batched
   fit is 41x faster than hmmlearn's `fit` on 1,000 sequences, 139x on 10,000 and 131x on 100,000 (3.2 s against
-  417 s). Its parameters differ from hmmlearn's by at most a relative 2e-13.
+  417 s). Its parameters differ from hmmlearn's by at most a relative 2.4e-13.
 
 Full record, cuts and diagnostics: `bench/results/SCOPE.md`; raw numbers: `bench/results/*.json`.
 

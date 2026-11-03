@@ -3,7 +3,8 @@
 **Verdict:** the regime mixture **beats the one-regime pooled probit on EUR/USD only** (1-minute: -0.0079 nats,
 SE 0.0014; a tie on equities, where the regimes also pass the diagnostics, and a loss on M4), **ties a continuous
 realised-volatility probit** on all three datasets, and **loses
-to a HAR-style probit** on EUR/USD (+0.0043, SE 0.0012). Six follow-up variants did not change that. Adding the
+to a HAR-style probit** on EUR/USD (+0.0043, SE 0.0012); it narrowly beats the HAR-style probit on M4
+(-0.0007, SE 0.0003), where the realised-vol probit is the better probit and a tie. Six follow-up variants did not change that. Adding the
 regime outputs to gradient boosting as extra inputs **never helped** on any dataset. This is a tie with the strong
 volatility baselines, and it is reported as one.
 
@@ -46,7 +47,7 @@ time, never shuffled), averaged over 3 seeds.
 | seeds | 2 | 3 | the task asks for >= 3 |
 | zero-inflated and Student-t emission arms | ablation arms | not run | the package does not ship these families (outside the two hmmlearn patches) |
 | K sweep | {2, 3, 4} | 1, 2, 3 in the main run; 4 in the variants | budget |
-| stock-hmmlearn arm | `GaussianHMM.fit` | `enforce_min_covar=False`: stock M-step, batched E-step | the batched fit gives hmmlearn's parameters to a relative 2e-13 and runs 41x (10^3 sequences) to 131-139x (10^4-10^5) faster, `bench/results/speed.json` from `python -m bench.run_speed` |
+| stock-hmmlearn arm | `GaussianHMM.fit` | `enforce_min_covar=False`: stock M-step, batched E-step | the batched fit gives hmmlearn's parameters to a relative 2.4e-13 and runs 41x (10^3 sequences) to 131-139x (10^4-10^5) faster, `bench/results/speed.json` from `python -m bench.run_speed` |
 | HMM iterations | n_iter 60, tol 1e-2 | unchanged | the tolerance is on the summed log-likelihood, so at these sizes every fit runs all 60 iterations |
 
 ## 3. Main results (held-out log-loss; in brackets: regimix - arm, +- paired SE)
@@ -91,7 +92,7 @@ win at 2-3 SE among about 18 comparisons can be chance. A variant is kept only i
 | variant | idea | EUR/USD | equities | M4 | kept |
 |---|---|---|---|---|---|
 | K = 4 (raw segments) | more regimes; K = 3 had beaten K = 2 | vs rv -0.0003 +- 0.0012, vs HAR +0.0016 +- 0.0010 | vs rv +0.0001 +- 0.0008, vs HAR +0.0009 +- 0.0005 | vs rv +0.0032 +- 0.0007 | no |
-| rv-relative, K = 2 | divide segments and distance by the lookback realised vol, so regimes model only the change in spread around a continuous level | vs rv **-0.0003 +- 0.0001** | vs rv -0.0000 +- 0.0000 | vs rv +0.0023 +- 0.0003 | no |
+| rv-relative, K = 2 | divide segments and distance by the lookback realised vol, so regimes model only the change in spread around a continuous level | vs rv **-0.0002 +- 0.0001** | vs rv -0.0000 +- 0.0000 | vs rv +0.0023 +- 0.0003 | no |
 | rv-relative, K = 3 | same, K = 3 | vs rv **-0.0005 +- 0.0002** | vs rv -0.0000 +- 0.0000 | vs rv +0.0060 +- 0.0005 | no |
 | HAR-relative, K = 2 | same idea on the HAR forecast level | vs HAR +0.0000 +- 0.0001 | vs HAR +0.0000 +- 0.0000 | vs HAR +0.0022 +- 0.0003 | no |
 | HAR-relative, K = 3 | same, K = 3 | vs HAR **-0.0001 +- 0.0000** | vs HAR +0.0000 +- 0.0000 | vs HAR +0.0011 +- 0.0002 | no |
@@ -99,8 +100,9 @@ win at 2-3 SE among about 18 comparisons can be chance. A variant is kept only i
 
 Exact values (both signs, against every reference arm) are in `fx_variants.json`, `eq_variants.json` and `m4_variants.json`.
 - **Relative variants:** dividing by the level turns the regime mixture into a **near-copy of the level arm**
-  (paired SE 0.00001-0.0002). On FX they gain 0.0001-0.0005 nats over it, which is significant but tiny. On
-  equities they tie, and on M4 they lose. Not kept.
+  (paired SE 0.00001-0.0002). On FX three of the four gain 0.0001-0.0005 nats over it, which is significant but tiny
+  (HAR-relative K = 2 ties). On equities they tie (HAR-relative K = 3 is a significant 0.00003-nat loss),
+  and on M4 they lose. Not kept.
 - **Small n:** regimix beats boosting at every size on FX and equities, by a wide margin when n is small. It
   beats the realised-vol probit only on M4 and at one equities size. **M4 caveat:** M4 training rows are
   ordered by series, so the "most recent n" are the last series' training parts. That M4 row is a transfer

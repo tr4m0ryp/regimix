@@ -256,7 +256,7 @@ def main():
     o.add("SpeedSeg", rows[100_000]["segments"], src + ": segments per sequence")
     o.add("SpeedIter", rows[100_000]["n_iter"], src + ": EM iterations")
     pd_ = max(r["max_rel_param_diff"] for r in sp["rows"])
-    mant, ex = f"{pd_:.0e}".split("e")
+    mant, ex = f"{pd_:.1e}".split("e")
     o.add("SpeedParamDiff", rf"{mant}\times10^{{{int(ex)}}}", src + ": max relative parameter difference (math)")
     line = (a.results / "PRIVATE_LINE.txt").read_text().strip().replace("%", "\\%").replace("~", "")
     o.add("PrivateLine", line, "bench/results/PRIVATE_LINE.txt (the only allowed sentence on the non-public task)")
