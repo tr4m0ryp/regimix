@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -83,6 +84,11 @@ def main_numbers(o, key, fname, js, npz, mode, paired):
         o.add(f"{key}{code}Brier", f4(a["brier"]), f"{src}.brier")
         o.add(f"{key}{code}ECE", f4(a["ece"]), f"{src}.ece (15 bins, mean over seeds)")
         o.add(f"{key}{code}SeedSd", f"{a['logloss_seed_sd']:.1e}", f"{src}.logloss_seed_sd")
+        if arm in npz.files:
+            pe = expit(npz[arm].mean(axis=0))
+            idx = np.minimum((pe * 15).astype(int), 14)
+            e = sum((idx == b).sum() * abs(pe[idx == b].mean() - y[idx == b].mean()) for b in range(15) if (idx == b).any())
+            o.add(f"{key}{code}ECEens", f4(e / len(y)), "recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2")
         if arm == "regimix":
             continue
         p = a["paired_ours_minus_arm"]
@@ -151,6 +157,14 @@ def main():
         main_numbers(o, key, fname, js, npz, mode, paired)
         variant_numbers(o, key, fname, json.loads((a.results / f"{fname}_variants.json").read_text()))
         o.lines.append("")
+    patch = REPO / "patches" / "hmmlearn" / "0001-gaussianhmm-apply-min-covar-after-every-m-step.patch"
+    head = " ".join(patch.read_text().split("\n\n---")[0].split())
+    mt = re.search(r"variances \[([\d.e-]+), ([\d.e-]+)\], ([\d.]+) x the floor", head)
+    src = f"patches/hmmlearn/{patch.name}: header repro (stock GaussianHMM, min_covar 1e-3)"
+    o.add("ReproVarBig", mt.group(1), src + ", larger fitted variance")
+    o.add("ReproVarSmall", mt.group(2), src + ", collapsed variance")
+    o.add("ReproFloorFrac", mt.group(3), src + ", collapsed variance / min_covar")
+    o.add("ReproZeroShare", re.search(r"about (\d+) % exact zeros", head).group(1), src + ", share of exact zeros")
     line = (a.results / "PRIVATE_LINE.txt").read_text().strip().replace("%", "\\%").replace("~", "")
     o.add("PrivateLine", line, "bench/results/PRIVATE_LINE.txt (the only allowed sentence on the non-public task)")
     a.out.write_text("\n".join(o.lines) + "\n")

@@ -28,7 +28,7 @@ ROWS = [("k1_pooled_probit", "one-regime probit (K=1)"), ("gate_ablation", "gate
         ("logreg", "logistic regression"), ("hgb", "gradient boosting"), ("k3", "regimix K=3"),
         ("rv_probit", "realised-vol probit"), ("har_probit", "HAR-style probit")]
 # Okabe-Ito
-BLUE, ORANGE, GREEN, VERM, GREY = "#0072B2", "#E69F00", "#009E73", "#D55E00", "#666666"
+BLUE, ORANGE, GREEN, VERM, GREY, PURPLE = "#0072B2", "#E69F00", "#009E73", "#D55E00", "#666666", "#CC79A7"
 
 plt.rcParams.update({"font.size": 8, "axes.titlesize": 8, "axes.labelsize": 8, "legend.fontsize": 7,
                      "xtick.labelsize": 7, "ytick.labelsize": 7, "pdf.fonttype": 42, "font.family": "serif"})
@@ -50,7 +50,7 @@ def fig1(results: Path, out: Path):
         ax.axvline(0, color=GREY, lw=0.8)
         for i, (y, (m, lo, hi)) in enumerate(zip(ypos, vals)):
             stack = i == len(vals) - 1
-            col = ORANGE if stack else (BLUE if hi < 0 else VERM if lo > 0 else GREY)
+            col = PURPLE if stack else (BLUE if hi < 0 else VERM if lo > 0 else GREY)
             if abs(m) > lim:  # off-scale: annotate the value instead of drawing it
                 ax.annotate(f"{m:+.3f}", xy=(np.sign(m) * lim * 0.97, y), xytext=(np.sign(m) * lim * 0.45, y),
                             va="center", ha="center", fontsize=6.5, color=col,
@@ -87,7 +87,7 @@ def reliability(p, y, bins=15):
 def fig2(preds: Path, out: Path):
     arms = [("regimix", "regimix K=2", BLUE, "o"), ("k1_pooled_probit", "K=1 probit", VERM, "^"),
             ("har_probit", "HAR probit", GREEN, "s")]
-    fig, axes = plt.subplots(1, 3, figsize=(6.6, 2.4))
+    fig, axes = plt.subplots(1, 3, figsize=(6.6, 3.0))
     for ax, (_, name, title) in zip(axes, DS):
         z = np.load(preds / f"{name}_test_logits.npz")
         y = z["y"]
@@ -100,7 +100,7 @@ def fig2(preds: Path, out: Path):
         ax.set_xlabel("predicted probability")
         ax.set_xlim(0, 1), ax.set_ylim(0, 1)
         ax.set_aspect("equal")
-        ax.legend(loc="upper left", frameon=False, handlelength=1.2, borderaxespad=0.2)
+        ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.27), frameon=False, handlelength=1.6, fontsize=6.5)
         ax.grid(lw=0.3, alpha=0.5)
     axes[0].set_ylabel("observed frequency")
     fig.tight_layout()

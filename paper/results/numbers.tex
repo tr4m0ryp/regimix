@@ -27,6 +27,8 @@
 \newcommand{\nFxOursECE}{0.0176}
 % bench/results/fx.json: arms.regimix.logloss_seed_sd
 \newcommand{\nFxOursSeedSd}{1.3e-05}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxOursECEens}{0.0181}
 % bench/results/fx.json: arms.k1_pooled_probit.logloss (mean over seeds of held-out log-loss, nats)
 \newcommand{\nFxKoneLL}{0.6280}
 % bench/results/fx.json: arms.k1_pooled_probit.brier
@@ -35,6 +37,8 @@
 \newcommand{\nFxKoneECE}{0.0237}
 % bench/results/fx.json: arms.k1_pooled_probit.logloss_seed_sd
 \newcommand{\nFxKoneSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxKoneECEens}{0.0237}
 % bench/results/fx.json: arms.k1_pooled_probit.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxKoneD}{-0.0079}
 % bench/results/fx.json: arms.k1_pooled_probit.paired_ours_minus_arm.mean, absolute
@@ -59,6 +63,8 @@
 \newcommand{\nFxRvECE}{0.0186}
 % bench/results/fx.json: arms.rv_probit.logloss_seed_sd
 \newcommand{\nFxRvSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxRvECEens}{0.0186}
 % bench/results/fx.json: arms.rv_probit.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxRvD}{+0.0024}
 % bench/results/fx.json: arms.rv_probit.paired_ours_minus_arm.mean, absolute
@@ -83,6 +89,8 @@
 \newcommand{\nFxHarECE}{0.0122}
 % bench/results/fx.json: arms.har_probit.logloss_seed_sd
 \newcommand{\nFxHarSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxHarECEens}{0.0122}
 % bench/results/fx.json: arms.har_probit.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxHarD}{+0.0043}
 % bench/results/fx.json: arms.har_probit.paired_ours_minus_arm.mean, absolute
@@ -107,6 +115,8 @@
 \newcommand{\nFxGateECE}{0.0349}
 % bench/results/fx.json: arms.gate_ablation.logloss_seed_sd
 \newcommand{\nFxGateSeedSd}{1.7e-05}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxGateECEens}{0.0348}
 % bench/results/fx.json: arms.gate_ablation.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxGateD}{-0.0075}
 % bench/results/fx.json: arms.gate_ablation.paired_ours_minus_arm.mean, absolute
@@ -131,6 +141,8 @@
 \newcommand{\nFxLogregECE}{0.0249}
 % bench/results/fx.json: arms.logreg.logloss_seed_sd
 \newcommand{\nFxLogregSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxLogregECEens}{0.0249}
 % bench/results/fx.json: arms.logreg.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxLogregD}{-0.0087}
 % bench/results/fx.json: arms.logreg.paired_ours_minus_arm.mean, absolute
@@ -155,6 +167,8 @@
 \newcommand{\nFxHgbECE}{0.0117}
 % bench/results/fx.json: arms.hgb.logloss_seed_sd
 \newcommand{\nFxHgbSeedSd}{6.8e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxHgbECEens}{0.0117}
 % bench/results/fx.json: arms.hgb.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxHgbD}{+0.0006}
 % bench/results/fx.json: arms.hgb.paired_ours_minus_arm.mean, absolute
@@ -179,6 +193,8 @@
 \newcommand{\nFxHgbRegECE}{0.0139}
 % bench/results/fx.json: arms.hgb_plus_regime.logloss_seed_sd
 \newcommand{\nFxHgbRegSeedSd}{3.4e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxHgbRegECEens}{0.0127}
 % bench/results/fx.json: arms.hgb_plus_regime.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxHgbRegD}{+0.0002}
 % bench/results/fx.json: arms.hgb_plus_regime.paired_ours_minus_arm.mean, absolute
@@ -203,6 +219,8 @@
 \newcommand{\nFxKthreeECE}{0.0146}
 % bench/results/fx.json: arms.k3.logloss_seed_sd
 \newcommand{\nFxKthreeSeedSd}{9.7e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxKthreeECEens}{0.0156}
 % bench/results/fx.json: arms.k3.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxKthreeD}{+0.0019}
 % bench/results/fx.json: arms.k3.paired_ours_minus_arm.mean, absolute
@@ -227,6 +245,8 @@
 \newcommand{\nFxStockECE}{0.0176}
 % bench/results/fx.json: arms.nofloor_stock_em.logloss_seed_sd
 \newcommand{\nFxStockSeedSd}{1.3e-05}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxStockECEens}{0.0181}
 % bench/results/fx.json: arms.nofloor_stock_em.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxStockD}{0.0000}
 % bench/results/fx.json: arms.nofloor_stock_em.paired_ours_minus_arm.mean, absolute
@@ -251,6 +271,8 @@
 \newcommand{\nFxNextOffECE}{0.0189}
 % bench/results/fx.json: arms.next_step_off.logloss_seed_sd
 \newcommand{\nFxNextOffSeedSd}{1.4e-05}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxNextOffECEens}{0.0189}
 % bench/results/fx.json: arms.next_step_off.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxNextOffD}{+0.0001}
 % bench/results/fx.json: arms.next_step_off.paired_ours_minus_arm.mean, absolute
@@ -275,6 +297,8 @@
 \newcommand{\nFxSigOffECE}{0.0176}
 % bench/results/fx.json: arms.sigma_min_off.logloss_seed_sd
 \newcommand{\nFxSigOffSeedSd}{1.3e-05}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxSigOffECEens}{0.0181}
 % bench/results/fx.json: arms.sigma_min_off.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxSigOffD}{0.0000}
 % bench/results/fx.json: arms.sigma_min_off.paired_ours_minus_arm.mean, absolute
@@ -299,6 +323,8 @@
 \newcommand{\nFxDriftOnECE}{0.0164}
 % bench/results/fx.json: arms.drift_on.logloss_seed_sd
 \newcommand{\nFxDriftOnSeedSd}{1.3e-05}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxDriftOnECEens}{0.0164}
 % bench/results/fx.json: arms.drift_on.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxDriftOnD}{0.0000}
 % bench/results/fx.json: arms.drift_on.paired_ours_minus_arm.mean, absolute
@@ -323,6 +349,8 @@
 \newcommand{\nFxIsoECE}{0.0176}
 % bench/results/fx.json: arms.isotonic.logloss_seed_sd
 \newcommand{\nFxIsoSeedSd}{4.0e-05}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxIsoECEens}{0.0177}
 % bench/results/fx.json: arms.isotonic.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxIsoD}{0.0000}
 % bench/results/fx.json: arms.isotonic.paired_ours_minus_arm.mean, absolute
@@ -347,6 +375,8 @@
 \newcommand{\nFxPlattStateECE}{0.0186}
 % bench/results/fx.json: arms.platt_state.logloss_seed_sd
 \newcommand{\nFxPlattStateSeedSd}{7.8e-06}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nFxPlattStateECEens}{0.0186}
 % bench/results/fx.json: arms.platt_state.paired_ours_minus_arm.mean (repo)
 \newcommand{\nFxPlattStateD}{+0.0002}
 % bench/results/fx.json: arms.platt_state.paired_ours_minus_arm.mean, absolute
@@ -538,6 +568,8 @@
 \newcommand{\nEqOursECE}{0.0153}
 % bench/results/eq.json: arms.regimix.logloss_seed_sd
 \newcommand{\nEqOursSeedSd}{1.8e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqOursECEens}{0.0148}
 % bench/results/eq.json: arms.k1_pooled_probit.logloss (mean over seeds of held-out log-loss, nats)
 \newcommand{\nEqKoneLL}{0.6508}
 % bench/results/eq.json: arms.k1_pooled_probit.brier
@@ -546,6 +578,8 @@
 \newcommand{\nEqKoneECE}{0.0172}
 % bench/results/eq.json: arms.k1_pooled_probit.logloss_seed_sd
 \newcommand{\nEqKoneSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqKoneECEens}{0.0172}
 % bench/results/eq.json: arms.k1_pooled_probit.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqKoneD}{-0.0003}
 % bench/results/eq.json: arms.k1_pooled_probit.paired_ours_minus_arm.mean, absolute
@@ -570,6 +604,8 @@
 \newcommand{\nEqRvECE}{0.0144}
 % bench/results/eq.json: arms.rv_probit.logloss_seed_sd
 \newcommand{\nEqRvSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqRvECEens}{0.0144}
 % bench/results/eq.json: arms.rv_probit.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqRvD}{0.0000}
 % bench/results/eq.json: arms.rv_probit.paired_ours_minus_arm.mean, absolute
@@ -594,6 +630,8 @@
 \newcommand{\nEqHarECE}{0.0139}
 % bench/results/eq.json: arms.har_probit.logloss_seed_sd
 \newcommand{\nEqHarSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqHarECEens}{0.0139}
 % bench/results/eq.json: arms.har_probit.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqHarD}{+0.0008}
 % bench/results/eq.json: arms.har_probit.paired_ours_minus_arm.mean, absolute
@@ -618,6 +656,8 @@
 \newcommand{\nEqGateECE}{0.0289}
 % bench/results/eq.json: arms.gate_ablation.logloss_seed_sd
 \newcommand{\nEqGateSeedSd}{1.3e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqGateECEens}{0.0290}
 % bench/results/eq.json: arms.gate_ablation.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqGateD}{-0.0036}
 % bench/results/eq.json: arms.gate_ablation.paired_ours_minus_arm.mean, absolute
@@ -642,6 +682,8 @@
 \newcommand{\nEqLogregECE}{0.0258}
 % bench/results/eq.json: arms.logreg.logloss_seed_sd
 \newcommand{\nEqLogregSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqLogregECEens}{0.0258}
 % bench/results/eq.json: arms.logreg.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqLogregD}{-0.0018}
 % bench/results/eq.json: arms.logreg.paired_ours_minus_arm.mean, absolute
@@ -666,6 +708,8 @@
 \newcommand{\nEqHgbECE}{0.0263}
 % bench/results/eq.json: arms.hgb.logloss_seed_sd
 \newcommand{\nEqHgbSeedSd}{5.1e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqHgbECEens}{0.0274}
 % bench/results/eq.json: arms.hgb.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqHgbD}{-0.0025}
 % bench/results/eq.json: arms.hgb.paired_ours_minus_arm.mean, absolute
@@ -690,6 +734,8 @@
 \newcommand{\nEqHgbRegECE}{0.0304}
 % bench/results/eq.json: arms.hgb_plus_regime.logloss_seed_sd
 \newcommand{\nEqHgbRegSeedSd}{4.9e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqHgbRegECEens}{0.0286}
 % bench/results/eq.json: arms.hgb_plus_regime.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqHgbRegD}{-0.0036}
 % bench/results/eq.json: arms.hgb_plus_regime.paired_ours_minus_arm.mean, absolute
@@ -714,6 +760,8 @@
 \newcommand{\nEqKthreeECE}{0.0134}
 % bench/results/eq.json: arms.k3.logloss_seed_sd
 \newcommand{\nEqKthreeSeedSd}{2.3e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqKthreeECEens}{0.0120}
 % bench/results/eq.json: arms.k3.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqKthreeD}{+0.0003}
 % bench/results/eq.json: arms.k3.paired_ours_minus_arm.mean, absolute
@@ -738,6 +786,8 @@
 \newcommand{\nEqStockECE}{0.0153}
 % bench/results/eq.json: arms.nofloor_stock_em.logloss_seed_sd
 \newcommand{\nEqStockSeedSd}{1.8e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqStockECEens}{0.0148}
 % bench/results/eq.json: arms.nofloor_stock_em.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqStockD}{0.0000}
 % bench/results/eq.json: arms.nofloor_stock_em.paired_ours_minus_arm.mean, absolute
@@ -762,6 +812,8 @@
 \newcommand{\nEqNextOffECE}{0.0169}
 % bench/results/eq.json: arms.next_step_off.logloss_seed_sd
 \newcommand{\nEqNextOffSeedSd}{9.7e-05}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqNextOffECEens}{0.0172}
 % bench/results/eq.json: arms.next_step_off.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqNextOffD}{-0.0005}
 % bench/results/eq.json: arms.next_step_off.paired_ours_minus_arm.mean, absolute
@@ -786,6 +838,8 @@
 \newcommand{\nEqSigOffECE}{0.0153}
 % bench/results/eq.json: arms.sigma_min_off.logloss_seed_sd
 \newcommand{\nEqSigOffSeedSd}{1.8e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqSigOffECEens}{0.0148}
 % bench/results/eq.json: arms.sigma_min_off.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqSigOffD}{0.0000}
 % bench/results/eq.json: arms.sigma_min_off.paired_ours_minus_arm.mean, absolute
@@ -810,6 +864,8 @@
 \newcommand{\nEqDriftOnECE}{0.0363}
 % bench/results/eq.json: arms.drift_on.logloss_seed_sd
 \newcommand{\nEqDriftOnSeedSd}{1.5e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqDriftOnECEens}{0.0370}
 % bench/results/eq.json: arms.drift_on.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqDriftOnD}{-0.0093}
 % bench/results/eq.json: arms.drift_on.paired_ours_minus_arm.mean, absolute
@@ -834,6 +890,8 @@
 \newcommand{\nEqIsoECE}{0.0200}
 % bench/results/eq.json: arms.isotonic.logloss_seed_sd
 \newcommand{\nEqIsoSeedSd}{6.6e-05}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqIsoECEens}{0.0201}
 % bench/results/eq.json: arms.isotonic.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqIsoD}{-0.0003}
 % bench/results/eq.json: arms.isotonic.paired_ours_minus_arm.mean, absolute
@@ -858,6 +916,8 @@
 \newcommand{\nEqPlattStateECE}{0.0195}
 % bench/results/eq.json: arms.platt_state.logloss_seed_sd
 \newcommand{\nEqPlattStateSeedSd}{2.4e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nEqPlattStateECEens}{0.0197}
 % bench/results/eq.json: arms.platt_state.paired_ours_minus_arm.mean (repo)
 \newcommand{\nEqPlattStateD}{-0.0010}
 % bench/results/eq.json: arms.platt_state.paired_ours_minus_arm.mean, absolute
@@ -1049,6 +1109,8 @@
 \newcommand{\nMfOursECE}{0.0411}
 % bench/results/m4.json: arms.regimix.logloss_seed_sd
 \newcommand{\nMfOursSeedSd}{2.9e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfOursECEens}{0.0623}
 % bench/results/m4.json: arms.k1_pooled_probit.logloss (mean over seeds of held-out log-loss, nats)
 \newcommand{\nMfKoneLL}{0.5849}
 % bench/results/m4.json: arms.k1_pooled_probit.brier
@@ -1057,6 +1119,8 @@
 \newcommand{\nMfKoneECE}{0.0182}
 % bench/results/m4.json: arms.k1_pooled_probit.logloss_seed_sd
 \newcommand{\nMfKoneSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfKoneECEens}{0.0182}
 % bench/results/m4.json: arms.k1_pooled_probit.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfKoneD}{+0.0029}
 % bench/results/m4.json: arms.k1_pooled_probit.paired_ours_minus_arm.mean, absolute
@@ -1079,6 +1143,8 @@
 \newcommand{\nMfRvECE}{0.0221}
 % bench/results/m4.json: arms.rv_probit.logloss_seed_sd
 \newcommand{\nMfRvSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfRvECEens}{0.0221}
 % bench/results/m4.json: arms.rv_probit.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfRvD}{+0.0010}
 % bench/results/m4.json: arms.rv_probit.paired_ours_minus_arm.mean, absolute
@@ -1101,6 +1167,8 @@
 \newcommand{\nMfHarECE}{0.0338}
 % bench/results/m4.json: arms.har_probit.logloss_seed_sd
 \newcommand{\nMfHarSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfHarECEens}{0.0338}
 % bench/results/m4.json: arms.har_probit.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfHarD}{-0.0007}
 % bench/results/m4.json: arms.har_probit.paired_ours_minus_arm.mean, absolute
@@ -1123,6 +1191,8 @@
 \newcommand{\nMfGateECE}{0.0407}
 % bench/results/m4.json: arms.gate_ablation.logloss_seed_sd
 \newcommand{\nMfGateSeedSd}{6.8e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfGateECEens}{0.0222}
 % bench/results/m4.json: arms.gate_ablation.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfGateD}{-0.0032}
 % bench/results/m4.json: arms.gate_ablation.paired_ours_minus_arm.mean, absolute
@@ -1145,6 +1215,8 @@
 \newcommand{\nMfLogregECE}{0.0602}
 % bench/results/m4.json: arms.logreg.logloss_seed_sd
 \newcommand{\nMfLogregSeedSd}{0.0e+00}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfLogregECEens}{0.0602}
 % bench/results/m4.json: arms.logreg.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfLogregD}{+0.2402}
 % bench/results/m4.json: arms.logreg.paired_ours_minus_arm.mean, absolute
@@ -1167,6 +1239,8 @@
 \newcommand{\nMfHgbECE}{0.0127}
 % bench/results/m4.json: arms.hgb.logloss_seed_sd
 \newcommand{\nMfHgbSeedSd}{3.1e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfHgbECEens}{0.0130}
 % bench/results/m4.json: arms.hgb.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfHgbD}{+0.3752}
 % bench/results/m4.json: arms.hgb.paired_ours_minus_arm.mean, absolute
@@ -1189,6 +1263,8 @@
 \newcommand{\nMfHgbRegECE}{0.0135}
 % bench/results/m4.json: arms.hgb_plus_regime.logloss_seed_sd
 \newcommand{\nMfHgbRegSeedSd}{8.0e-04}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfHgbRegECEens}{0.0109}
 % bench/results/m4.json: arms.hgb_plus_regime.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfHgbRegD}{+0.3738}
 % bench/results/m4.json: arms.hgb_plus_regime.paired_ours_minus_arm.mean, absolute
@@ -1211,6 +1287,8 @@
 \newcommand{\nMfKthreeECE}{0.0604}
 % bench/results/m4.json: arms.k3.logloss_seed_sd
 \newcommand{\nMfKthreeSeedSd}{2.1e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfKthreeECEens}{0.0680}
 % bench/results/m4.json: arms.k3.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfKthreeD}{+0.0002}
 % bench/results/m4.json: arms.k3.paired_ours_minus_arm.mean, absolute
@@ -1233,6 +1311,8 @@
 \newcommand{\nMfStockECE}{0.0411}
 % bench/results/m4.json: arms.nofloor_stock_em.logloss_seed_sd
 \newcommand{\nMfStockSeedSd}{2.9e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfStockECEens}{0.0623}
 % bench/results/m4.json: arms.nofloor_stock_em.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfStockD}{0.0000}
 % bench/results/m4.json: arms.nofloor_stock_em.paired_ours_minus_arm.mean, absolute
@@ -1255,6 +1335,8 @@
 \newcommand{\nMfNextOffECE}{0.0417}
 % bench/results/m4.json: arms.next_step_off.logloss_seed_sd
 \newcommand{\nMfNextOffSeedSd}{3.6e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfNextOffECEens}{0.0660}
 % bench/results/m4.json: arms.next_step_off.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfNextOffD}{-0.0003}
 % bench/results/m4.json: arms.next_step_off.paired_ours_minus_arm.mean, absolute
@@ -1277,6 +1359,8 @@
 \newcommand{\nMfSigOffECE}{0.0411}
 % bench/results/m4.json: arms.sigma_min_off.logloss_seed_sd
 \newcommand{\nMfSigOffSeedSd}{2.9e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfSigOffECEens}{0.0623}
 % bench/results/m4.json: arms.sigma_min_off.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfSigOffD}{0.0000}
 % bench/results/m4.json: arms.sigma_min_off.paired_ours_minus_arm.mean, absolute
@@ -1299,6 +1383,8 @@
 \newcommand{\nMfDriftOnECE}{0.0478}
 % bench/results/m4.json: arms.drift_on.logloss_seed_sd
 \newcommand{\nMfDriftOnSeedSd}{5.5e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfDriftOnECEens}{0.0640}
 % bench/results/m4.json: arms.drift_on.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfDriftOnD}{-0.1028}
 % bench/results/m4.json: arms.drift_on.paired_ours_minus_arm.mean, absolute
@@ -1321,6 +1407,8 @@
 \newcommand{\nMfIsoECE}{0.0206}
 % bench/results/m4.json: arms.isotonic.logloss_seed_sd
 \newcommand{\nMfIsoSeedSd}{9.1e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfIsoECEens}{0.0211}
 % bench/results/m4.json: arms.isotonic.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfIsoD}{+0.0076}
 % bench/results/m4.json: arms.isotonic.paired_ours_minus_arm.mean, absolute
@@ -1343,6 +1431,8 @@
 \newcommand{\nMfPlattStateECE}{0.0337}
 % bench/results/m4.json: arms.platt_state.logloss_seed_sd
 \newcommand{\nMfPlattStateSeedSd}{1.0e-03}
+% recomputed: ECE (15 bins) of the seed-averaged logit, as in Fig. 2
+\newcommand{\nMfPlattStateECEens}{0.0402}
 % bench/results/m4.json: arms.platt_state.paired_ours_minus_arm.mean (repo)
 \newcommand{\nMfPlattStateD}{+0.0020}
 % bench/results/m4.json: arms.platt_state.paired_ours_minus_arm.mean, absolute
@@ -1506,5 +1596,13 @@
 % bench/results/m4_variants.json: small_n[3000].ours_minus.k1_pooled_probit.se
 \newcommand{\nMfSmallThreeThousandVsKoneSE}{0.0001}
 
+% patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), larger fitted variance
+\newcommand{\nReproVarBig}{0.163}
+% patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), collapsed variance
+\newcommand{\nReproVarSmall}{2.3e-6}
+% patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), collapsed variance / min_covar
+\newcommand{\nReproFloorFrac}{0.002}
+% patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), share of exact zeros
+\newcommand{\nReproZeroShare}{68}
 % bench/results/PRIVATE_LINE.txt (the only allowed sentence on the non-public task)
 \newcommand{\nPrivateLine}{On a proprietary binary threshold-exceedance task, the regime-mixture output did not beat a single-regime realised-volatility probit on its own: block-CV log-loss +0.010 nats worse (paired block-bootstrap SE 0.012, 95 \% CI [-0.013, +0.032], i.e. a tie within noise). Against stock hmmlearn on held-out log-loss, a zero-inflated emission gave +0.0001 (SE 0.0037), a per-position variance +0.0014 (SE 0.0012), and a Student-t emission -0.0040 (SE 0.0015, 95 \% CI [-0.0068, -0.0009]; negative is better).}
