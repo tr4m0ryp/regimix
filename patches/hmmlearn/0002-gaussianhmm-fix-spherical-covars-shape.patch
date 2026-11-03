@@ -1,0 +1,84 @@
+From: Moussa Ouallaf <tramoryp@proton.me>
+Subject: [PATCH] GaussianHMM: spherical covars_ has shape (n_components, n_features, n_features)
+
+With covariance_type="spherical", initialisation and the M-step store
+`_covars_` tiled to (n_components, n_features), and `fill_covars`
+ravels it, so `covars_` returns n_components * n_features matrices
+instead of n_components. Indexing `covars_[k]` then reads the wrong
+state for k >= 1 (`_generate_sample_from_state` does exactly that).
+
+Repro: 2-D data, GaussianHMM(2, "spherical").fit(X) gives
+covars_.shape == (4, 2, 2) and _covars_.shape == (2, 2).
+
+Fix: the M-step stores one variance per state, shape (n_components,),
+as documented, and `fill_covars` reduces a (n_components, n_features)
+array (the layout still produced at initialisation) to one value per
+state before expanding it. Likelihoods are unchanged: the spherical
+density already broadcast either layout.
+---
+--- a/src/hmmlearn/hmm.py
++++ b/src/hmmlearn/hmm.py
+@@ -365,8 +365,9 @@
+                 c_d = max(covars_weight - 1, 0) + denom
+                 self._covars_ = (covars_prior + c_n) / np.maximum(c_d, 1e-5)
+                 if self.covariance_type == 'spherical':
+-                    self._covars_ = np.tile(self._covars_.mean(1)[:, None],
+-                                            (1, self._covars_.shape[1]))
++                    # One variance per state, shape (n_components,), as
++                    # documented for ``covars_``.
++                    self._covars_ = self._covars_.mean(1)
+             elif self.covariance_type in ('tied', 'full'):
+                 c_n = np.empty((self.n_components, self.n_features,
+                                 self.n_features))
+--- a/src/hmmlearn/utils.py
++++ b/src/hmmlearn/utils.py
+@@ -63,6 +63,13 @@
+     elif covariance_type == 'tied':
+         return np.tile(covars, (n_components, 1, 1))
+     elif covariance_type == 'spherical':
++        # A (n_components, n_features) array holds one value per state
++        # repeated over features (the layout produced by initialisation);
++        # reduce it to one variance per state before expanding, otherwise
++        # the result has n_components * n_features matrices.
++        covars = np.asarray(covars)
++        if covars.ndim == 2:
++            covars = covars.mean(axis=1)
+         # Regardless of what is passed in, we flatten in
+         # and then expand it to the correct shape
+         covars = np.ravel(covars)
+--- /dev/null
++++ b/src/hmmlearn/tests/test_gaussian_hmm_spherical_shape.py
+@@ -0,0 +1,33 @@
++import numpy as np
++from numpy.testing import assert_allclose
++
++from .. import hmm
++
++
++def _fit(n_features=2, n_components=2, n_iter=5):
++    rng = np.random.RandomState(0)
++    X = np.concatenate([rng.normal(0, 1, (300, n_features)),
++                        rng.normal(5, 3, (300, n_features))])
++    return hmm.GaussianHMM(n_components, "spherical", n_iter=n_iter,
++                           random_state=0).fit(X)
++
++
++def test_spherical_covars_shape_after_init_and_fit():
++    h = _fit(n_iter=1)
++    assert h.covars_.shape == (2, 2, 2)
++    h = _fit(n_iter=5)
++    assert h._covars_.shape == (2,)
++    assert h.covars_.shape == (2, 2, 2)
++
++
++def test_spherical_covars_are_scaled_identities():
++    h = _fit(n_features=3, n_components=3)
++    for k, cov in enumerate(h.covars_):
++        assert_allclose(cov, h._covars_[k] * np.eye(3))
++
++
++def test_spherical_sample_uses_each_state_variance():
++    h = _fit()
++    for k in range(h.n_components):
++        assert_allclose(h.covars_[k], h._covars_[k] * np.eye(2))
++    h.sample(10, random_state=0)
