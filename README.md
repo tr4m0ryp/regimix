@@ -5,10 +5,11 @@
   <a href="paper/regimix.pdf"><img alt="Paper PDF" src="https://img.shields.io/badge/Paper-PDF-b31b1b?logo=adobeacrobatreader&logoColor=white"></a>
 </p>
 
-**A label-free hidden-regime model that beats a one-regime probit by 0.0079 nats (SE 0.0014) where regimes are
-real, fits 10^5 short paths 60-100x faster than stock hmmlearn, fixes a silent variance collapse in hmmlearn
-0.3.3, and tells you when its regimes are fake, while honestly tying, not beating, a realised-volatility
-probit.**
+**Two hmmlearn 0.3.3 fixes (a silent variance collapse in the M-step, the wrong shape of spherical `covars_`), a
+batched HMM fit that runs 130x faster than hmmlearn on 10^5 short paths with the same estimates, and diagnostics
+that tell you when the regimes are fake. As a forecaster it has no edge: it ties a plain realised-volatility
+probit on all three public datasets, and beats only a one-regime probit, on EUR/USD only (-0.0079 nats, SE
+0.0014).**
 
 ```bash
 pip install "git+https://github.com/tr4m0ryp/regimix"
@@ -59,7 +60,9 @@ predictions from models that did not see those rows, so the probabilities mean w
 70 % happen about 70 % of the time.
 
 **Step 6: check the modes are real.** If the model's "modes" switch every step or have nearly the same spread,
-they are noise, and the diagnostics say so. On one dataset here they did, and that is exactly where regimix lost.
+they are noise, and the diagnostics say so. On one dataset here (M4) they did, and that is exactly where regimix
+lost to the one-mode model. A clean report is no promise of a gain: on the equities the modes passed and
+regimix still only tied the one-mode model.
 
 ```mermaid
 flowchart LR
@@ -73,7 +76,8 @@ flowchart LR
 ```
 
 What it found: the modes do help over a model that assumes one fixed spread. But a plain "how jumpy has it been
-lately?" estimate does just as well, because two modes are a coarse copy of a smooth volatility level.
+lately?" estimate does just as well, and on EUR/USD a HAR-style version of it does better. Our reading, not
+tested, is that two modes are a coarse copy of a smooth volatility level.
 
 </details>
 
@@ -115,8 +119,9 @@ v_j \leftarrow \max\!\left(v_j^{\mathrm{EM}},\, m\right)
 ```
 
 The estimator also returns $`w_i`$ and $`\operatorname{logit}\tilde p_i`$ for use as inputs to another learner.
-The filter and the regime-weighted normal tail are known (Hamilton 1989; Hardy 2001); the contribution is the
-combination, the out-of-fold calibration, the floor fix and the diagnostics.
+The filter and the regime-weighted normal tail are known (Hamilton 1989; Hardy 2001). What is new here is
+engineering: the two hmmlearn fixes, the batched fit and the diagnostics. The out-of-fold calibration is a
+design choice with no clear measured gain over in-sample Platt (mixed sign, at most 0.0008 nats).
 
 ## Results
 
@@ -136,13 +141,19 @@ regimix is better.**
 | pristine hmmlearn 0.3.3 EM | identical | identical | identical |
 | boosting + regime outputs, minus boosting | +0.0004 ± 0.0004 | +0.0011 ± 0.0008 | +0.0015 ± 0.0004 |
 
-- **Where regimes are real** (EUR/USD: dwell 19.6 / 8.7 segments, spread ratio 3.4), regimix beats the one-regime
-  probit and the gate ablation clearly, ties the realised-vol probit and loses to the HAR-style probit.
+- **On EUR/USD** (dwell 19.6 / 8.7 segments, spread ratio 3.4), regimix beats the one-regime probit and the gate
+  ablation clearly, ties the realised-vol probit and loses to the HAR-style probit.
+- **On equities** the regimes also pass the diagnostics (dwell 14.9 / 3.9, spread ratio 2.7), yet regimix ties
+  the one-regime probit and both volatility probits: passing the diagnostics does not guarantee a gain.
+- **No dataset** gives regimix a win over the best volatility probit. On M4 it narrowly beats the HAR-style probit
+  (95 % interval -0.0013 to -0.00005), but the better probit there, realised vol, is a tie.
 - **Where they are not** (M4: dwell 1.0 / 1.3, spread ratio 1.09), the diagnostics warn, and regimix loses to K = 1.
 - **As extra inputs** to gradient boosting, the regime outputs never helped and hurt on M4.
 - **The floor never binds** on these public data (smallest stock variance 4.8x to 30x the floor), so its evidence
   is the synthetic repro in `patches/hmmlearn/`: stock hmmlearn ends at 0.002x its own floor.
-- **Speed:** the batched E-step matches hmmlearn to about 1e-14 and runs 60-100x faster on many short sequences.
+- **Speed** (`bench/results/speed.json`, synthetic 5-segment sequences, 10 EM iterations, one thread): the batched
+  fit is 41x faster than hmmlearn's `fit` on 1,000 sequences, 139x on 10,000 and 131x on 100,000 (3.2 s against
+  417 s). Its parameters differ from hmmlearn's by at most a relative 2e-13.
 
 Full record, cuts and diagnostics: `bench/results/SCOPE.md`; raw numbers: `bench/results/*.json`.
 
@@ -157,8 +168,10 @@ Full record, cuts and diagnostics: `bench/results/SCOPE.md`; raw numbers: `bench
 - **It lost a comparison.** A realised-volatility probit with no hidden states reads the volatility level as well
   as the regimes do. To beat it the regimes must carry what the level misses, such as a switch inside the horizon,
   which regimix does not model.
+- **Three datasets:** nothing here says how it does on other data.
 - **Thin evidence:** one held-out period per dataset, 3 seeds, post-hoc variants on that same period (none won on
-  all three datasets), survivorship bias in the equity universe, and synthetic-only evidence for the floor.
+  all three datasets), survivorship bias in the equity universe, and synthetic-only evidence for the floor and
+  the speed-up (one machine).
 - **`drift=True`** reads the segment mean per square-root time while the mixture expects it per unit time; it loses
   heavily on equities and M4. Keep drift off.
 - **One-feature HMMs only** in the batched fit.
@@ -171,6 +184,7 @@ python -m venv .venv && .venv/bin/pip install -e ".[test]" matplotlib
 .venv/bin/python -m pytest                       # package tests and the hmmlearn patch repros
 .venv/bin/python examples/quickstart.py          # synthetic data with a known answer
 PY=.venv/bin/python bash bench/run_all.sh        # all three benchmarks + variants, about 1 h on 2 threads
+.venv/bin/python -m bench.run_speed              # batched fit against hmmlearn, about 8 min on 1 thread
 for d in fx eq m4; do .venv/bin/python -m paper.results.ablate_calib $d; done   # calibration ablation
 .venv/bin/python paper/results/make_numbers.py   # paper numbers from bench/results
 .venv/bin/python paper/figures/make.py           # paper figures
@@ -184,6 +198,7 @@ Yahoo Finance daily closes and the M4 hourly files. Raw held-out predictions go 
 ```bibtex
 @misc{ouallaf2026regimix,
   author = {Ouallaf, Moussa},
+  organization = {Husimi.ai},
   title  = {Regime-mixture exceedance probabilities from a partly observed path, with collapse diagnostics},
   year   = {2026},
   howpublished = {\url{https://github.com/tr4m0ryp/regimix}},

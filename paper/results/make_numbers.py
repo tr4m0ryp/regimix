@@ -245,6 +245,19 @@ def main():
     o.add("ReproVarSmall", small, src + ", collapsed variance (LaTeX math form)")
     o.add("ReproFloorFrac", mt.group(3), src + ", collapsed variance / min_covar")
     o.add("ReproZeroShare", re.search(r"about (\d+) % exact zeros", head).group(1), src + ", share of exact zeros")
+    sp = json.loads((a.results / "speed.json").read_text())
+    rows = {r["n_sequences"]: r for r in sp["rows"]}
+    src = "bench/results/speed.json"
+    for n, nm in ((1_000, "A"), (10_000, "B"), (100_000, "C")):
+        o.add(f"Speed{nm}", f"{rows[n]['speedup']:.0f}", src + f": hmmlearn_s / batched_s at n={n}")
+    o.add("SpeedNC", "100,000", src + ": largest n_sequences")
+    o.add("SpeedTimeC", f"{rows[100_000]['batched_s']:.1f}", src + ": batched seconds at n=100000")
+    o.add("SpeedTimeHC", f"{rows[100_000]['hmmlearn_s']:.0f}", src + ": hmmlearn seconds at n=100000")
+    o.add("SpeedSeg", rows[100_000]["segments"], src + ": segments per sequence")
+    o.add("SpeedIter", rows[100_000]["n_iter"], src + ": EM iterations")
+    pd_ = max(r["max_rel_param_diff"] for r in sp["rows"])
+    mant, ex = f"{pd_:.0e}".split("e")
+    o.add("SpeedParamDiff", rf"{mant}\times10^{{{int(ex)}}}", src + ": max relative parameter difference (math)")
     line = (a.results / "PRIVATE_LINE.txt").read_text().strip().replace("%", "\\%").replace("~", "")
     o.add("PrivateLine", line, "bench/results/PRIVATE_LINE.txt (the only allowed sentence on the non-public task)")
     a.out.write_text("\n".join(o.lines) + "\n")

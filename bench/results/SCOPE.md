@@ -1,7 +1,8 @@
 # Benchmark scope, cuts and results
 
-**Verdict:** the regime mixture **beats the one-regime pooled probit where regimes exist** (EUR/USD 1-minute:
--0.0079 nats, SE 0.0014), **ties a continuous realised-volatility probit** on all three datasets, and **loses
+**Verdict:** the regime mixture **beats the one-regime pooled probit on EUR/USD only** (1-minute: -0.0079 nats,
+SE 0.0014; a tie on equities, where the regimes also pass the diagnostics, and a loss on M4), **ties a continuous
+realised-volatility probit** on all three datasets, and **loses
 to a HAR-style probit** on EUR/USD (+0.0043, SE 0.0012). Six follow-up variants did not change that. Adding the
 regime outputs to gradient boosting as extra inputs **never helped** on any dataset. This is a tie with the strong
 volatility baselines, and it is reported as one.
@@ -45,7 +46,7 @@ time, never shuffled), averaged over 3 seeds.
 | seeds | 2 | 3 | the task asks for >= 3 |
 | zero-inflated and Student-t emission arms | ablation arms | not run | the package does not ship these families (outside the two hmmlearn patches) |
 | K sweep | {2, 3, 4} | 1, 2, 3 in the main run; 4 in the variants | budget |
-| stock-hmmlearn arm | `GaussianHMM.fit` | `enforce_min_covar=False`: stock M-step, batched E-step | the batched E-step matches hmmlearn to ~1e-14 (package tests) and runs 60-100x faster |
+| stock-hmmlearn arm | `GaussianHMM.fit` | `enforce_min_covar=False`: stock M-step, batched E-step | the batched fit gives hmmlearn's parameters to a relative 2e-13 and runs 41x (10^3 sequences) to 131-139x (10^4-10^5) faster, `bench/results/speed.json` from `python -m bench.run_speed` |
 | HMM iterations | n_iter 60, tol 1e-2 | unchanged | the tolerance is on the summed log-likelihood, so at these sizes every fit runs all 60 iterations |
 
 ## 3. Main results (held-out log-loss; in brackets: regimix - arm, +- paired SE)
@@ -82,7 +83,8 @@ time, never shuffled), averaged over 3 seeds.
 ## 4. What would have to be true for it to win, and the variants tried (`*_variants.json`)
 
 The main run met the regime conditions on FX and equities, but the competitor that won is not a slow
-volatility estimator: it reads a continuous volatility level, and a two-level regime only coarsens that level. The
+volatility estimator: it reads a continuous volatility level, and our untested reading is that a two-level
+regime only coarsens that level. The
 variants below each test one way around that. They are scored on the same held-out tail, so a single
 win at 2-3 SE among about 18 comparisons can be chance. A variant is kept only if it wins on all three datasets.
 
@@ -103,8 +105,8 @@ Exact values (both signs, against every reference arm) are in `fx_variants.json`
   beats the realised-vol probit only on M4 and at one equities size. **M4 caveat:** M4 training rows are
   ordered by series, so the "most recent n" are the last series' training parts. That M4 row is a transfer
   test to other series, not a learning curve. Not kept: there is no consistent win over the probits.
-- **K = 3 against K = 2:** K = 3 is better on all three datasets (FX -0.0019 +- 0.0006, equities -0.0003 +-
-  0.0001, M4 -0.0002 +- 0.0001). This is the one consistent internal improvement, but it still does not beat the
+- **K = 3 against K = 2:** K = 3 is better on FX and equities (FX -0.0019 +- 0.0006, equities -0.0003 +-
+  0.0001) and ties on M4 (-0.0002 +- 0.0001, 95 % interval covers zero). It is the only ablation that helps on more than one dataset, but it still does not beat the
   volatility probits, and the default stays K = 2 because K = 3 was picked on the held-out tail.
 
 **Classification (improvement discipline):** "lost a comparison", reopenable. The baseline that wins (a

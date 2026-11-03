@@ -1717,5 +1717,23 @@
 \newcommand{\nReproFloorFrac}{0.002}
 % patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), share of exact zeros
 \newcommand{\nReproZeroShare}{68}
+% bench/results/speed.json: hmmlearn_s / batched_s at n=1000
+\newcommand{\nSpeedA}{41}
+% bench/results/speed.json: hmmlearn_s / batched_s at n=10000
+\newcommand{\nSpeedB}{139}
+% bench/results/speed.json: hmmlearn_s / batched_s at n=100000
+\newcommand{\nSpeedC}{131}
+% bench/results/speed.json: largest n_sequences
+\newcommand{\nSpeedNC}{100,000}
+% bench/results/speed.json: batched seconds at n=100000
+\newcommand{\nSpeedTimeC}{3.2}
+% bench/results/speed.json: hmmlearn seconds at n=100000
+\newcommand{\nSpeedTimeHC}{417}
+% bench/results/speed.json: segments per sequence
+\newcommand{\nSpeedSeg}{5}
+% bench/results/speed.json: EM iterations
+\newcommand{\nSpeedIter}{10}
+% bench/results/speed.json: max relative parameter difference (math)
+\newcommand{\nSpeedParamDiff}{2\times10^{-13}}
 % bench/results/PRIVATE_LINE.txt (the only allowed sentence on the non-public task)
 \newcommand{\nPrivateLine}{On a proprietary binary threshold-exceedance task, the regime-mixture output did not beat a single-regime realised-volatility probit on its own: block-CV log-loss +0.010 nats worse (paired block-bootstrap SE 0.012, 95 \% CI [-0.013, +0.032], i.e. a tie within noise). Against stock hmmlearn on held-out log-loss, a zero-inflated emission gave +0.0001 (SE 0.0037), a per-position variance +0.0014 (SE 0.0012), and a Student-t emission -0.0040 (SE 0.0015, 95 \% CI [-0.0068, -0.0009]; negative is better).}
