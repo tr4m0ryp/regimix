@@ -1596,6 +1596,93 @@
 % bench/results/m4_variants.json: small_n[3000].ours_minus.k1_pooled_probit.se
 \newcommand{\nMfSmallThreeThousandVsKoneSE}{0.0001}
 
+% regimix/estimator/classifier.py: RegimeExceedanceClassifier default n_states
+\newcommand{\nCfgK}{2}
+% regimix/estimator/classifier.py: RegimeExceedanceClassifier default n_iter
+\newcommand{\nCfgNIter}{60}
+% regimix/estimator/classifier.py: RegimeExceedanceClassifier default tol
+\newcommand{\nCfgTol}{0.01}
+% regimix/estimator/classifier.py: RegimeExceedanceClassifier default min_covar
+\newcommand{\nCfgMinCovar}{0.05}
+% regimix/estimator/classifier.py: RegimeExceedanceClassifier default sigma_min
+\newcommand{\nCfgSigmaMin}{0.05}
+% arm label: one-regime pooled probit (K = 1), bench/arms/regime.py
+\newcommand{\nCfgKone}{1}
+% arm label: K = 3, bench/results/*.json arms.k3
+\newcommand{\nCfgKthree}{3}
+% variant label: K = 4, bench/results/*_variants.json scaled[k4]
+\newcommand{\nCfgKfour}{4}
+% bench/arms/run.py: BlockedKFold(n)
+\newcommand{\nCfgFolds}{5}
+% bench/core/stats.py: paired n_boot
+\newcommand{\nCfgBoot}{2,000}
+% bench/core/stats.py: ece bins
+\newcommand{\nCfgBins}{15}
+% bench/data/fx.py: make test_frac (same in equities.py, m4.py)
+\newcommand{\nCfgTestPct}{30}
+% 100 - held-out share
+\newcommand{\nCfgTrainPct}{70}
+% bench/data/fx.py: make years start
+\newcommand{\nCfgFxYearA}{2016}
+% bench/data/fx.py: make years end
+\newcommand{\nCfgFxYearB}{2023}
+% bench/data/fx.py: EDGES (minutes)
+\newcommand{\nCfgFxEdges}{0, 1, 3, 7, 15, 31, 63}
+% bench/data/fx.py: HORIZON (minutes)
+\newcommand{\nCfgFxH}{30}
+% bench/data/fx.py: PIPS (+-)
+\newcommand{\nCfgFxPip}{3}
+% bench/data/equities.py: EDGES (days)
+\newcommand{\nCfgEqEdges}{0, 1, 3, 7, 15, 31}
+% bench/data/equities.py: HORIZON (days)
+\newcommand{\nCfgEqH}{10}
+% bench/data/equities.py: U (+- percent)
+\newcommand{\nCfgEqPct}{2}
+% bench/data/equities.py: make every
+\newcommand{\nCfgEqEvery}{4}
+% bench/results/eq.json: meta.tickers (count)
+\newcommand{\nCfgEqTickers}{59}
+% bench/data/equities.py: URL period1=1104537600 (2005-01-01)
+\newcommand{\nCfgEqYearA}{2005}
+% bench/data/equities.py: URL period2=1735689600 (2025-01-01, last year 2024)
+\newcommand{\nCfgEqYearB}{2024}
+% bench/data/m4.py: EDGES (hours)
+\newcommand{\nCfgMfEdges}{0, 1, 2, 4, 8, 16, 32, 48}
+% bench/data/m4.py: HORIZONS[0] (hours)
+\newcommand{\nCfgMfHa}{12}
+% bench/data/m4.py: HORIZONS[1] (hours)
+\newcommand{\nCfgMfHb}{24}
+% bench/data/m4.py: C (+-)
+\newcommand{\nCfgMfC}{0.5}
+% bench/data/m4.py: make every
+\newcommand{\nCfgMfEvery}{9}
+% bench/results/{fx,eq,m4}.json (count of datasets)
+\newcommand{\nCfgNData}{3}
+% bench/results/fx.json: arms (count, pre-registered main run)
+\newcommand{\nCfgNArms}{15}
+% bench/results/fx_variants.json: len(scaled) + small_n (post-hoc variants)
+\newcommand{\nCfgNVariants}{6}
+% post-hoc variants x 3 datasets
+\newcommand{\nCfgNPostCmp}{18}
+% bench/results/fx_variants.json: small_n[0].n_train
+\newcommand{\nCfgSmallA}{300}
+% bench/results/fx_variants.json: small_n[1].n_train
+\newcommand{\nCfgSmallB}{1,000}
+% bench/results/fx_variants.json: small_n[2].n_train
+\newcommand{\nCfgSmallC}{3,000}
+% regimix/diagnostics/report.py: dwell warning
+\newcommand{\nCfgDwellMin}{2}
+% regimix/diagnostics/report.py: spread warning
+\newcommand{\nCfgSpreadMin}{2}
+% patches/hmmlearn/0001-*.patch header: min_covar=1e-3
+\newcommand{\nCfgReproMinCovar}{10^{-3}}
+% patches/hmmlearn/0001-*.patch header: round(N(0, 0.5^2))
+\newcommand{\nCfgReproSd}{0.5}
+% patches/hmmlearn/0001-*.patch header: 4000 sequences
+\newcommand{\nCfgReproSeqs}{4,000}
+% patches/hmmlearn/0001-*.patch header: length 7
+\newcommand{\nCfgReproLen}{7}
+
 % patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), larger fitted variance
 \newcommand{\nReproVarBig}{0.163}
 % patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), collapsed variance

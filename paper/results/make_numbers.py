@@ -141,6 +141,69 @@ def variant_numbers(o, key, fname, vj):
             o.add(f"{key}Small{n}Vs{ARMS[arm]}SE", f4(c["se"]), f"{path}: small_n[{row['n_train']}].ours_minus.{arm}.se")
 
 
+def config_numbers(o, results: Path):
+    """Setup constants the prose cites (defaults, lookbacks, offsets, counts), each read from its source."""
+    import inspect
+
+    from bench.core import stats
+    from bench.data import equities, fx, m4
+    from regimix import RegimeExceedanceClassifier
+
+    sig = inspect.signature(RegimeExceedanceClassifier.__init__).parameters
+    src = "regimix/estimator/classifier.py: RegimeExceedanceClassifier default"
+    o.add("CfgK", sig["n_states"].default, src + " n_states")
+    o.add("CfgNIter", sig["n_iter"].default, src + " n_iter")
+    o.add("CfgTol", f"{sig['tol'].default:g}", src + " tol")
+    o.add("CfgMinCovar", f"{sig['min_covar'].default:g}", src + " min_covar")
+    o.add("CfgSigmaMin", f"{sig['sigma_min'].default:g}", src + " sigma_min")
+    o.add("CfgKone", 1, "arm label: one-regime pooled probit (K = 1), bench/arms/regime.py")
+    o.add("CfgKthree", 3, "arm label: K = 3, bench/results/*.json arms.k3")
+    o.add("CfgKfour", 4, "variant label: K = 4, bench/results/*_variants.json scaled[k4]")
+    run = (REPO / "bench" / "arms" / "run.py").read_text()
+    o.add("CfgFolds", re.search(r"BlockedKFold\((\d+)\)", run).group(1), "bench/arms/run.py: BlockedKFold(n)")
+    o.add("CfgBoot", f"{inspect.signature(stats.paired).parameters['n_boot'].default:,}", "bench/core/stats.py: paired n_boot")
+    o.add("CfgBins", inspect.signature(stats.ece).parameters["bins"].default, "bench/core/stats.py: ece bins")
+    tf = inspect.signature(fx.make).parameters["test_frac"].default
+    o.add("CfgTestPct", f"{tf * 100:.0f}", "bench/data/fx.py: make test_frac (same in equities.py, m4.py)")
+    o.add("CfgTrainPct", f"{(1 - tf) * 100:.0f}", "100 - held-out share")
+    yrs = inspect.signature(fx.make).parameters["years"].default
+    o.add("CfgFxYearA", yrs.start, "bench/data/fx.py: make years start")
+    o.add("CfgFxYearB", yrs.stop - 1, "bench/data/fx.py: make years end")
+    o.add("CfgFxEdges", ", ".join(map(str, fx.EDGES)), "bench/data/fx.py: EDGES (minutes)")
+    o.add("CfgFxH", fx.HORIZON, "bench/data/fx.py: HORIZON (minutes)")
+    o.add("CfgFxPip", max(fx.PIPS), "bench/data/fx.py: PIPS (+-)")
+    o.add("CfgEqEdges", ", ".join(map(str, equities.EDGES)), "bench/data/equities.py: EDGES (days)")
+    o.add("CfgEqH", equities.HORIZON, "bench/data/equities.py: HORIZON (days)")
+    o.add("CfgEqPct", f"{max(equities.U) * 100:.0f}", "bench/data/equities.py: U (+- percent)")
+    o.add("CfgEqEvery", inspect.signature(equities.make).parameters["every"].default, "bench/data/equities.py: make every")
+    eqm = json.loads((results / "eq.json").read_text())["meta"]
+    o.add("CfgEqTickers", len(eqm["tickers"]), "bench/results/eq.json: meta.tickers (count)")
+    o.add("CfgEqYearA", 2005, "bench/data/equities.py: URL period1=1104537600 (2005-01-01)")
+    o.add("CfgEqYearB", 2024, "bench/data/equities.py: URL period2=1735689600 (2025-01-01, last year 2024)")
+    o.add("CfgMfEdges", ", ".join(map(str, m4.EDGES)), "bench/data/m4.py: EDGES (hours)")
+    o.add("CfgMfHa", m4.HORIZONS[0], "bench/data/m4.py: HORIZONS[0] (hours)")
+    o.add("CfgMfHb", m4.HORIZONS[1], "bench/data/m4.py: HORIZONS[1] (hours)")
+    o.add("CfgMfC", f"{max(m4.C):g}", "bench/data/m4.py: C (+-)")
+    o.add("CfgMfEvery", inspect.signature(m4.make).parameters["every"].default, "bench/data/m4.py: make every")
+    o.add("CfgNData", 3, "bench/results/{fx,eq,m4}.json (count of datasets)")
+    arms = json.loads((results / "fx.json").read_text())["arms"]
+    o.add("CfgNArms", len(arms), "bench/results/fx.json: arms (count, pre-registered main run)")
+    vj = json.loads((results / "fx_variants.json").read_text())
+    nvar = len(vj["scaled"]) + 1
+    o.add("CfgNVariants", nvar, "bench/results/fx_variants.json: len(scaled) + small_n (post-hoc variants)")
+    o.add("CfgNPostCmp", nvar * 3, "post-hoc variants x 3 datasets")
+    o.add("CfgSmallA", vj["small_n"][0]["n_train"], "bench/results/fx_variants.json: small_n[0].n_train")
+    o.add("CfgSmallB", f"{vj['small_n'][1]['n_train']:,}", "bench/results/fx_variants.json: small_n[1].n_train")
+    o.add("CfgSmallC", f"{vj['small_n'][2]['n_train']:,}", "bench/results/fx_variants.json: small_n[2].n_train")
+    rep = (REPO / "regimix" / "diagnostics" / "report.py").read_text()
+    o.add("CfgDwellMin", re.search(r'st\["dwell"\]\.min\(\) < (\d+)', rep).group(1), "regimix/diagnostics/report.py: dwell warning")
+    o.add("CfgSpreadMin", re.search(r'st\["spread_ratio"\] < (\d+)', rep).group(1), "regimix/diagnostics/report.py: spread warning")
+    o.add("CfgReproMinCovar", "10^{-3}", "patches/hmmlearn/0001-*.patch header: min_covar=1e-3")
+    o.add("CfgReproSd", "0.5", "patches/hmmlearn/0001-*.patch header: round(N(0, 0.5^2))")
+    o.add("CfgReproSeqs", "4,000", "patches/hmmlearn/0001-*.patch header: 4000 sequences")
+    o.add("CfgReproLen", 7, "patches/hmmlearn/0001-*.patch header: length 7")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--results", type=Path, default=REPO / "bench" / "results")
@@ -157,6 +220,8 @@ def main():
         main_numbers(o, key, fname, js, npz, mode, paired)
         variant_numbers(o, key, fname, json.loads((a.results / f"{fname}_variants.json").read_text()))
         o.lines.append("")
+    config_numbers(o, a.results)
+    o.lines.append("")
     patch = REPO / "patches" / "hmmlearn" / "0001-gaussianhmm-apply-min-covar-after-every-m-step.patch"
     head = " ".join(patch.read_text().split("\n\n---")[0].split())
     mt = re.search(r"variances \[([\d.e-]+), ([\d.e-]+)\], ([\d.]+) x the floor", head)
