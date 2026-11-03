@@ -1,0 +1,5 @@
+.harvest/
+*.aux
+*.log
+*.blg
+*.out

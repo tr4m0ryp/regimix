@@ -37,17 +37,17 @@
 \newlabel{eq:delta}{{8}{3}{Metric and error}{equation.3.8}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Results}{3}{section.4}\protected@file@percent }
 \newlabel{sec:results}{{4}{3}{Results}{section.4}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Regimix wins against the pooled probit only where regimes exist, and never against the best volatility probit. Held-out log-loss in nats; in brackets regimix minus arm with its block or cluster bootstrap SE (negative: regimix better). The last row is boosting with regime outputs minus boosting alone (positive: appending hurt).}}{3}{table.caption.5}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{tab:main}{{1}{3}{Regimix wins against the pooled probit only where regimes exist, and never against the best volatility probit. Held-out log-loss in nats; in brackets regimix minus arm with its block or cluster bootstrap SE (negative: regimix better). The last row is boosting with regime outputs minus boosting alone (positive: appending hurt)}{table.caption.5}{}}
 \citation{hardy2001}
 \bibstyle{plainnat}
 \bibdata{refs}
 \bibcite{andersen2003}{{1}{2003}{{Andersen et~al.}}{{Andersen, Bollerslev, Diebold, and Labys}}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The volatility probits match or beat regimix on every dataset, and the regime outputs never help boosting. Paired held-out log-loss difference, regimix minus arm, with 95\,\% block (EUR/USD, equities) or cluster (M4) bootstrap intervals; blue is a regimix win, red a loss, grey a tie, purple the stacking row. Off-scale values printed.}}{4}{figure.caption.6}\protected@file@percent }
-\newlabel{fig:paired}{{1}{4}{The volatility probits match or beat regimix on every dataset, and the regime outputs never help boosting. Paired held-out log-loss difference, regimix minus arm, with \nCfgCI \,\% block (EUR/USD, equities) or cluster (M4) bootstrap intervals; blue is a regimix win, red a loss, grey a tie, purple the stacking row. Off-scale values printed}{figure.caption.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Regimix is better calibrated than the pooled probit where regimes exist and worse on M4, where they do not. Reliability diagrams of the seed-averaged held-out probabilities, 15{} bins, sparse bins hidden; the legend gives each arm's ECE.}}{4}{figure.caption.7}\protected@file@percent }
-\newlabel{fig:reliability}{{2}{4}{Regimix is better calibrated than the pooled probit where regimes exist and worse on M4, where they do not. Reliability diagrams of the seed-averaged held-out probabilities, \nCfgBins {} bins, sparse bins hidden; the legend gives each arm's ECE}{figure.caption.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Regimix wins against the pooled probit only where regimes exist, and never against the best volatility probit. Held-out log-loss, nats; in brackets regimix minus arm $\pm $ bootstrap SE (negative: regimix better). Last row: boosting with regime outputs minus boosting (positive: appending hurt).}}{4}{table.caption.5}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:main}{{1}{4}{Regimix wins against the pooled probit only where regimes exist, and never against the best volatility probit. Held-out log-loss, nats; in brackets regimix minus arm $\pm $ bootstrap SE (negative: regimix better). Last row: boosting with regime outputs minus boosting (positive: appending hurt)}{table.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The volatility probits match or beat regimix on every dataset, and the regime outputs never help boosting. Paired held-out log-loss difference, regimix minus arm, 95\,\% block or (M4) series bootstrap intervals; blue a regimix win, red a loss, grey a tie, purple stacking.}}{4}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:paired}{{1}{4}{The volatility probits match or beat regimix on every dataset, and the regime outputs never help boosting. Paired held-out log-loss difference, regimix minus arm, \nCfgCI \,\% block or (M4) series bootstrap intervals; blue a regimix win, red a loss, grey a tie, purple stacking}{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Regimix has a lower ECE than the pooled probit where regimes exist and a higher one on M4, where they do not. Reliability diagrams of the seed-averaged held-out probabilities, 15{} bins, sparse bins hidden; the legend gives each arm's ECE.}}{4}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:reliability}{{2}{4}{Regimix has a lower ECE than the pooled probit where regimes exist and a higher one on M4, where they do not. Reliability diagrams of the seed-averaged held-out probabilities, \nCfgBins {} bins, sparse bins hidden; the legend gives each arm's ECE}{figure.caption.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Limits}{4}{section.5}\protected@file@percent }
 \newlabel{sec:limits}{{5}{4}{Limits}{section.5}{}}
 \bibcite{baum1970}{{2}{1970}{{Baum et~al.}}{{Baum, Petrie, Soules, and Weiss}}}
@@ -68,12 +68,17 @@
 \@writefile{toc}{\contentsline {section}{\numberline {A}Proofs}{6}{appendix.A}\protected@file@percent }
 \newlabel{app:proofs}{{A}{6}{Proofs}{appendix.A}{}}
 \@writefile{toc}{\contentsline {paragraph}{Lemma~\ref {lem:mix}.}{6}{section*.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Lemma~\ref {lem:floor}.}{6}{section*.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Lemma~\ref {lem:leak}.}{6}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Lemma~\ref {lem:leak}.}{6}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Lemma~\ref {lem:floor}.}{6}{section*.11}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {B}Ablations and post-hoc variants}{7}{appendix.B}\protected@file@percent }
 \newlabel{app:variants}{{B}{7}{Ablations and post-hoc variants}{appendix.B}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces No single default carries the method, and the floors never bind on public data. Regimix minus the ablated arm, log-loss in nats $\pm $ paired SE; a positive value means the ablated arm is better.}}{7}{table.caption.12}\protected@file@percent }
 \newlabel{tab:ablation}{{2}{7}{No single default carries the method, and the floors never bind on public data. Regimix minus the ablated arm, log-loss in nats $\pm $ paired SE; a positive value means the ablated arm is better}{table.caption.12}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Dividing by the volatility level turns regimix into a near-copy of the level arm, and more regimes do not help against it. No variant wins on all three datasets.}}{7}{table.caption.13}\protected@file@percent }
 \newlabel{tab:variants}{{3}{7}{Dividing by the volatility level turns regimix into a near-copy of the level arm, and more regimes do not help against it. No variant wins on all three datasets}{table.caption.13}{}}
-\gdef \@abspage@last{7}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Applying regimix to new data, and reproduction}{8}{appendix.C}\protected@file@percent }
+\newlabel{app:use}{{C}{8}{Applying regimix to new data, and reproduction}{appendix.C}{}}
+\@writefile{toc}{\contentsline {paragraph}{Inputs.}{8}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Calls.}{8}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Reproduction.}{8}{section*.16}\protected@file@percent }
+\gdef \@abspage@last{8}
