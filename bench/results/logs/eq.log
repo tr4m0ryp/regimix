@@ -1,0 +1,23 @@
+[eq] task built in 57s: 73485 episodes, 22125 held out, positive rate 0.550
+[equities_daily] seed 209652396: HMM fits done 266s
+[equities_daily] seed 209652396: all arms 360s
+[equities_daily] seed 1791095845: HMM fits done 646s
+[equities_daily] seed 1791095845: all arms 659s
+[equities_daily] seed 1872583848: HMM fits done 988s
+[equities_daily] seed 1872583848: all arms 1002s
+  har_probit           logloss 0.64964 brier 0.22868 ece 0.0139  ours-arm +0.00083 (SE 0.00052)
+  k3                   logloss 0.65017 brier 0.22895 ece 0.0134  ours-arm +0.00030 (SE 0.00012)
+  rv_probit            logloss 0.65047 brier 0.22908 ece 0.0144  ours-arm +0.00000 (SE 0.00080)
+  regimix              logloss 0.65047 brier 0.22907 ece 0.0153
+  nofloor_stock_em     logloss 0.65047 brier 0.22907 ece 0.0153  ours-arm +0.00000 (SE 0.00000)
+  sigma_min_off        logloss 0.65047 brier 0.22907 ece 0.0153  ours-arm +0.00000 (SE 0.00000)
+  isotonic             logloss 0.65081 brier 0.22925 ece 0.0200  ours-arm -0.00034 (SE 0.00031)
+  k1_pooled_probit     logloss 0.65081 brier 0.22927 ece 0.0172  ours-arm -0.00034 (SE 0.00050)
+  next_step_off        logloss 0.65095 brier 0.22926 ece 0.0169  ours-arm -0.00047 (SE 0.00013)
+  platt_state          logloss 0.65143 brier 0.22944 ece 0.0195  ours-arm -0.00096 (SE 0.00021)
+  logreg               logloss 0.65226 brier 0.22984 ece 0.0258  ours-arm -0.00179 (SE 0.00084)
+  hgb                  logloss 0.65298 brier 0.23015 ece 0.0263  ours-arm -0.00250 (SE 0.00081)
+  hgb_plus_regime      logloss 0.65405 brier 0.23049 ece 0.0304  ours-arm -0.00357 (SE 0.00111)
+  gate_ablation        logloss 0.65411 brier 0.23062 ece 0.0289  ours-arm -0.00364 (SE 0.00050)
+  drift_on             logloss 0.65975 brier 0.23354 ece 0.0363  ours-arm -0.00928 (SE 0.00276)
+[eq] done in 1062s

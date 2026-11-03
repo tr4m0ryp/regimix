@@ -1,0 +1,23 @@
+[fx] task built in 56s: 47280 episodes, 13078 held out, positive rate 0.498
+[eurusd_m1] seed 209652396: HMM fits done 214s
+[eurusd_m1] seed 209652396: all arms 279s
+[eurusd_m1] seed 1791095845: HMM fits done 444s
+[eurusd_m1] seed 1791095845: all arms 452s
+[eurusd_m1] seed 1872583848: HMM fits done 655s
+[eurusd_m1] seed 1872583848: all arms 664s
+  har_probit           logloss 0.61576 brier 0.21328 ece 0.0122  ours-arm +0.00433 (SE 0.00122)
+  rv_probit            logloss 0.61770 brier 0.21380 ece 0.0186  ours-arm +0.00240 (SE 0.00149)
+  k3                   logloss 0.61824 brier 0.21445 ece 0.0146  ours-arm +0.00185 (SE 0.00056)
+  hgb                  logloss 0.61951 brier 0.21502 ece 0.0117  ours-arm +0.00058 (SE 0.00104)
+  platt_state          logloss 0.61989 brier 0.21506 ece 0.0186  ours-arm +0.00021 (SE 0.00031)
+  hgb_plus_regime      logloss 0.61992 brier 0.21516 ece 0.0139  ours-arm +0.00018 (SE 0.00096)
+  next_step_off        logloss 0.62003 brier 0.21511 ece 0.0189  ours-arm +0.00007 (SE 0.00024)
+  isotonic             logloss 0.62006 brier 0.21505 ece 0.0176  ours-arm +0.00004 (SE 0.00044)
+  drift_on             logloss 0.62007 brier 0.21514 ece 0.0164  ours-arm +0.00002 (SE 0.00013)
+  regimix              logloss 0.62009 brier 0.21514 ece 0.0176
+  nofloor_stock_em     logloss 0.62009 brier 0.21514 ece 0.0176  ours-arm +0.00000 (SE 0.00000)
+  sigma_min_off        logloss 0.62009 brier 0.21514 ece 0.0176  ours-arm +0.00000 (SE 0.00000)
+  gate_ablation        logloss 0.62761 brier 0.21816 ece 0.0349  ours-arm -0.00752 (SE 0.00115)
+  k1_pooled_probit     logloss 0.62799 brier 0.21826 ece 0.0237  ours-arm -0.00790 (SE 0.00141)
+  logreg               logloss 0.62882 brier 0.21842 ece 0.0249  ours-arm -0.00872 (SE 0.00156)
+[fx] done in 723s
