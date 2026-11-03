@@ -162,6 +162,7 @@ def config_numbers(o, results: Path):
     run = (REPO / "bench" / "arms" / "run.py").read_text()
     o.add("CfgFolds", re.search(r"BlockedKFold\((\d+)\)", run).group(1), "bench/arms/run.py: BlockedKFold(n)")
     o.add("CfgBoot", f"{inspect.signature(stats.paired).parameters['n_boot'].default:,}", "bench/core/stats.py: paired n_boot")
+    o.add("CfgCI", 95, "bench/core/stats.py: paired ci95 (2.5 / 97.5 percentiles)")
     o.add("CfgBins", inspect.signature(stats.ece).parameters["bins"].default, "bench/core/stats.py: ece bins")
     tf = inspect.signature(fx.make).parameters["test_frac"].default
     o.add("CfgTestPct", f"{tf * 100:.0f}", "bench/data/fx.py: make test_frac (same in equities.py, m4.py)")
@@ -227,7 +228,9 @@ def main():
     mt = re.search(r"variances \[([\d.e-]+), ([\d.e-]+)\], ([\d.]+) x the floor", head)
     src = f"patches/hmmlearn/{patch.name}: header repro (stock GaussianHMM, min_covar 1e-3)"
     o.add("ReproVarBig", mt.group(1), src + ", larger fitted variance")
-    o.add("ReproVarSmall", mt.group(2), src + ", collapsed variance")
+    sm = re.fullmatch(r"([\d.]+)e(-?)0*(\d+)", mt.group(2))  # 2.3e-6 -> 2.3\times10^{-6} (math mode)
+    small = rf"{sm.group(1)}\times10^{{{sm.group(2)}{sm.group(3)}}}" if sm else mt.group(2)
+    o.add("ReproVarSmall", small, src + ", collapsed variance (LaTeX math form)")
     o.add("ReproFloorFrac", mt.group(3), src + ", collapsed variance / min_covar")
     o.add("ReproZeroShare", re.search(r"about (\d+) % exact zeros", head).group(1), src + ", share of exact zeros")
     line = (a.results / "PRIVATE_LINE.txt").read_text().strip().replace("%", "\\%").replace("~", "")

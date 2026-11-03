@@ -35,7 +35,7 @@ plt.rcParams.update({"font.size": 8, "axes.titlesize": 8, "axes.labelsize": 8, "
 
 
 def fig1(results: Path, out: Path):
-    fig, axes = plt.subplots(1, 3, figsize=(6.6, 2.7), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(5.5, 2.25), sharey=True)
     labels = [r[1] for r in ROWS] + ["boosting + regime\nminus boosting"]
     ypos = np.arange(len(labels))[::-1]
     for ax, (f, _, title) in zip(axes, DS):
@@ -60,14 +60,13 @@ def fig1(results: Path, out: Path):
                         capsize=2, lw=1)
         ax.axhline(0.5, color=GREY, lw=0.4, ls=":")
         ax.set_xlim(-lim, lim)
+        ax.set_xticks([-0.01, 0, 0.01])
         ax.set_title(title)
-        ax.set_xlabel("paired log-loss diff. (nats)")
+        ax.set_xlabel("regimix $-$ arm (nats)")
         ax.grid(axis="x", lw=0.3, alpha=0.5)
     axes[0].set_yticks(ypos)
     axes[0].set_yticklabels(labels)
-    fig.text(0.99, 0.005, "regimix - arm; < 0: regimix better. Bars: 95 % block / cluster bootstrap CI.",
-             ha="right", fontsize=6.5, color=GREY)
-    fig.tight_layout(rect=(0, 0.03, 1, 1))
+    fig.tight_layout(w_pad=0.6)
     fig.savefig(out)
     plt.close(fig)
 
@@ -85,9 +84,9 @@ def reliability(p, y, bins=15):
 
 
 def fig2(preds: Path, out: Path):
-    arms = [("regimix", "regimix K=2", BLUE, "o"), ("k1_pooled_probit", "K=1 probit", VERM, "^"),
-            ("har_probit", "HAR probit", GREEN, "s")]
-    fig, axes = plt.subplots(1, 3, figsize=(6.6, 3.0))
+    arms = [("regimix", "regimix", BLUE, "o"), ("k1_pooled_probit", "K=1", VERM, "^"),
+            ("har_probit", "HAR", GREEN, "s")]
+    fig, axes = plt.subplots(1, 3, figsize=(5.5, 2.05))
     for ax, (_, name, title) in zip(axes, DS):
         z = np.load(preds / f"{name}_test_logits.npz")
         y = z["y"]
@@ -95,12 +94,14 @@ def fig2(preds: Path, out: Path):
         for arm, lab, col, mk in arms:
             p = expit(z[arm].mean(axis=0))  # seed-averaged logit
             xs, ys, _, e = reliability(p, y)
-            ax.plot(xs, ys, marker=mk, ms=3, lw=0.9, color=col, label=f"{lab} (ECE {e:.3f})")
+            ax.plot(xs, ys, marker=mk, ms=3, lw=0.9, color=col, label=f"{lab} {e:.3f}")
         ax.set_title(title)
         ax.set_xlabel("predicted probability")
+        ax.set_xticks([0, 0.5, 1]), ax.set_yticks([0, 0.5, 1])
         ax.set_xlim(0, 1), ax.set_ylim(0, 1)
         ax.set_aspect("equal")
-        ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.27), frameon=False, handlelength=1.6, fontsize=6.5)
+        ax.legend(loc="upper left", frameon=False, handlelength=1.2, fontsize=6.5, borderaxespad=0.2,
+                  labelspacing=0.2, handletextpad=0.4)
         ax.grid(lw=0.3, alpha=0.5)
     axes[0].set_ylabel("observed frequency")
     fig.tight_layout()

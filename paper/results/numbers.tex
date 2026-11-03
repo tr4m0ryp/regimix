@@ -1616,6 +1616,8 @@
 \newcommand{\nCfgFolds}{5}
 % bench/core/stats.py: paired n_boot
 \newcommand{\nCfgBoot}{2,000}
+% bench/core/stats.py: paired ci95 (2.5 / 97.5 percentiles)
+\newcommand{\nCfgCI}{95}
 % bench/core/stats.py: ece bins
 \newcommand{\nCfgBins}{15}
 % bench/data/fx.py: make test_frac (same in equities.py, m4.py)
@@ -1685,8 +1687,8 @@
 
 % patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), larger fitted variance
 \newcommand{\nReproVarBig}{0.163}
-% patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), collapsed variance
-\newcommand{\nReproVarSmall}{2.3e-6}
+% patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), collapsed variance (LaTeX math form)
+\newcommand{\nReproVarSmall}{2.3\times10^{-6}}
 % patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), collapsed variance / min_covar
 \newcommand{\nReproFloorFrac}{0.002}
 % patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch: header repro (stock GaussianHMM, min_covar 1e-3), share of exact zeros

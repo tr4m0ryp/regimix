@@ -1,0 +1,121 @@
+\begin{thebibliography}{15}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Andersen et~al.(2003)Andersen, Bollerslev, Diebold, and
+  Labys]{andersen2003}
+Torben~G. Andersen, Tim Bollerslev, Francis~X. Diebold, and Paul Labys.
+\newblock Modeling and forecasting realized volatility.
+\newblock \emph{Econometrica}, 71\penalty0 (2):\penalty0 579--625, 2003.
+\newblock \doi{10.1111/1468-0262.00418}.
+
+\bibitem[Baum et~al.(1970)Baum, Petrie, Soules, and Weiss]{baum1970}
+Leonard~E. Baum, Ted Petrie, George Soules, and Norman Weiss.
+\newblock A maximization technique occurring in the statistical analysis of
+  probabilistic functions of {M}arkov chains.
+\newblock \emph{The Annals of Mathematical Statistics}, 41\penalty0
+  (1):\penalty0 164--171, 1970.
+\newblock \doi{10.1214/aoms/1177697196}.
+
+\bibitem[Corsi(2009)]{corsi2009}
+Fulvio Corsi.
+\newblock A simple approximate long-memory model of realized volatility.
+\newblock \emph{Journal of Financial Econometrics}, 7\penalty0 (2):\penalty0
+  174--196, 2009.
+\newblock \doi{10.1093/jjfinec/nbp001}.
+
+\bibitem[Dempster et~al.(1977)Dempster, Laird, and Rubin]{dempster1977}
+Arthur~P. Dempster, Nan~M. Laird, and Donald~B. Rubin.
+\newblock Maximum likelihood from incomplete data via the {EM} algorithm.
+\newblock \emph{Journal of the Royal Statistical Society: Series B
+  (Methodological)}, 39\penalty0 (1):\penalty0 1--22, 1977.
+\newblock \doi{10.1111/j.2517-6161.1977.tb01600.x}.
+
+\bibitem[Guo et~al.(2017)Guo, Pleiss, Sun, and Weinberger]{guo2017}
+Chuan Guo, Geoff Pleiss, Yu~Sun, and Kilian~Q. Weinberger.
+\newblock On calibration of modern neural networks.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine
+  Learning}, volume~70 of \emph{Proceedings of Machine Learning Research},
+  pages 1321--1330, 2017.
+\newblock URL \url{https://proceedings.mlr.press/v70/guo17a.html}.
+
+\bibitem[Hamilton(1989)]{hamilton1989}
+James~D. Hamilton.
+\newblock A new approach to the economic analysis of nonstationary time series
+  and the business cycle.
+\newblock \emph{Econometrica}, 57\penalty0 (2):\penalty0 357--384, 1989.
+\newblock \doi{10.2307/1912559}.
+
+\bibitem[Hardy(2001)]{hardy2001}
+Mary~R. Hardy.
+\newblock A regime-switching model of long-term stock returns.
+\newblock \emph{North American Actuarial Journal}, 5\penalty0 (2):\penalty0
+  41--53, 2001.
+\newblock \doi{10.1080/10920277.2001.10595984}.
+
+\bibitem[{hmmlearn developers}(2024)]{hmmlearn}
+{hmmlearn developers}.
+\newblock hmmlearn: Hidden {M}arkov models in {P}ython, with scikit-learn like
+  {API}.
+\newblock \url{https://github.com/hmmlearn/hmmlearn}, 2024.
+\newblock Version 0.3.3.
+
+\bibitem[K{\"u}nsch(1989)]{kunsch1989}
+Hans~R. K{\"u}nsch.
+\newblock The jackknife and the bootstrap for general stationary observations.
+\newblock \emph{The Annals of Statistics}, 17\penalty0 (3):\penalty0
+  1217--1241, 1989.
+\newblock \doi{10.1214/aos/1176347265}.
+
+\bibitem[Lin et~al.(2007)Lin, Lin, and Weng]{lin2007}
+Hsuan-Tien Lin, Chih-Jen Lin, and Ruby~C. Weng.
+\newblock A note on {P}latt's probabilistic outputs for support vector
+  machines.
+\newblock \emph{Machine Learning}, 68\penalty0 (3):\penalty0 267--276, 2007.
+\newblock \doi{10.1007/s10994-007-5018-6}.
+
+\bibitem[Makridakis et~al.(2020)Makridakis, Spiliotis, and
+  Assimakopoulos]{makridakis2020}
+Spyros Makridakis, Evangelos Spiliotis, and Vassilios Assimakopoulos.
+\newblock The {M4} competition: 100,000 time series and 61 forecasting methods.
+\newblock \emph{International Journal of Forecasting}, 36\penalty0
+  (1):\penalty0 54--74, 2020.
+\newblock \doi{10.1016/j.ijforecast.2019.04.014}.
+
+\bibitem[Newey and West(1987)]{neweywest1987}
+Whitney~K. Newey and Kenneth~D. West.
+\newblock A simple, positive semi-definite, heteroskedasticity and
+  autocorrelation consistent covariance matrix.
+\newblock \emph{Econometrica}, 55\penalty0 (3):\penalty0 703--708, 1987.
+\newblock \doi{10.2307/1913610}.
+
+\bibitem[Pedregosa et~al.(2011)Pedregosa, Varoquaux, Gramfort, Michel, Thirion,
+  Grisel, Blondel, Prettenhofer, Weiss, Dubourg, Vanderplas, Passos,
+  Cournapeau, Brucher, Perrot, and Duchesnay]{pedregosa2011}
+Fabian Pedregosa, Ga{\"e}l Varoquaux, Alexandre Gramfort, Vincent Michel,
+  Bertrand Thirion, Olivier Grisel, Mathieu Blondel, Peter Prettenhofer, Ron
+  Weiss, Vincent Dubourg, Jake Vanderplas, Alexandre Passos, David Cournapeau,
+  Matthieu Brucher, Matthieu Perrot, and {\'E}douard Duchesnay.
+\newblock Scikit-learn: Machine learning in {P}ython.
+\newblock \emph{Journal of Machine Learning Research}, 12:\penalty0 2825--2830,
+  2011.
+\newblock URL \url{https://jmlr.org/papers/v12/pedregosa11a.html}.
+
+\bibitem[Platt(1999)]{platt1999}
+John~C. Platt.
+\newblock Probabilistic outputs for support vector machines and comparisons to
+  regularized likelihood methods.
+\newblock In Alexander~J. Smola, Peter Bartlett, Bernhard Sch{\"o}lkopf, and
+  Dale Schuurmans, editors, \emph{Advances in Large Margin Classifiers}, pages
+  61--74. MIT Press, 1999.
+
+\bibitem[Wolpert(1992)]{wolpert1992}
+David~H. Wolpert.
+\newblock Stacked generalization.
+\newblock \emph{Neural Networks}, 5\penalty0 (2):\penalty0 241--259, 1992.
+\newblock \doi{10.1016/S0893-6080(05)80023-1}.
+
+\end{thebibliography}
