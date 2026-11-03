@@ -1,0 +1,170 @@
+From: Moussa Ouallaf <tramoryp@proton.me>
+Subject: [PATCH] GaussianHMM: apply min_covar after every M-step
+
+`min_covar` is documented as a floor on the covariance, but GaussianHMM
+adds it only when the covariances are initialised; `_do_mstep` never
+applies it. On data with many exactly repeated values (rounded or
+discretely ticked measurements) one state captures the repeats and its
+variance shrinks without bound while the log-likelihood grows without
+bound.
+
+Repro (no external data): 4000 sequences of length 7 of
+round(N(0, 0.5^2)) (about 68 % exact zeros),
+GaussianHMM(2, "diag", min_covar=1e-3, n_iter=100, tol=1e-4,
+random_state=0) ends with variances [0.163, 2.3e-6], 0.002 x the floor.
+
+Fix: after each covariance update, clip variances at `min_covar` for
+"spherical" / "diag" and raise eigenvalues below `min_covar` to it for
+"full" / "tied" (matrices already above the floor are left untouched,
+so fits that never reach the floor are bit-identical).
+
+Why EM stays monotone: for "spherical" / "diag" the M-step objective is
+separable and, per variance v with weighted scatter s, proportional to
+-(log v + s / v), unimodal with its maximum at v = s; the maximiser over
+v >= min_covar is therefore max(s, min_covar). For "full" / "tied" the
+maximiser of -(log det S + tr(S^-1 C)) over {S : S - min_covar I is PSD}
+is C with its eigenvalues clipped at min_covar. The update is the exact
+constrained M-step, so the algorithm is a (generalised) EM on the
+constrained parameter set and the likelihood never decreases.
+
+Tests: variance >= min_covar after fit (spherical, diag), eigenvalues
+>= min_covar (full, tied, singular data), monotone log-likelihood for
+all four types, and an exact match with min_covar=0 when the floor never
+binds. Related: #365 reports the same for GMMHMM (not changed here).
+---
+--- a/src/hmmlearn/hmm.py
++++ b/src/hmmlearn/hmm.py
+@@ -23,6 +23,32 @@
+ COVARIANCE_TYPES = frozenset(("spherical", "diag", "full", "tied"))
+ 
+ 
++def _floor_covars(covars, covariance_type, min_covar):
++    """
++    Apply the ``min_covar`` floor to covariances in their compact layout.
++
++    For "spherical" and "diag" every variance is clipped at ``min_covar``.
++    For "full" and "tied" every eigenvalue below ``min_covar`` is raised to
++    it; a matrix whose eigenvalues are all above the floor is returned
++    unchanged.  In both cases the result is the maximiser of the M-step
++    objective over covariances whose eigenvalues are at least ``min_covar``.
++    """
++    if min_covar <= 0:
++        return covars
++    if covariance_type in ('spherical', 'diag'):
++        return np.maximum(covars, min_covar)
++
++    def floor_matrix(cv):
++        eigvals, eigvecs = linalg.eigh(cv)
++        if eigvals.min() >= min_covar:
++            return cv
++        return (eigvecs * np.maximum(eigvals, min_covar)) @ eigvecs.T
++
++    if covariance_type == 'tied':
++        return floor_matrix(covars)
++    return np.array([floor_matrix(cv) for cv in covars])
++
++
+ class CategoricalHMM(_emissions.BaseCategoricalHMM, BaseHMM):
+     """
+     Hidden Markov Model with categorical (discrete) emissions.
+@@ -219,8 +245,10 @@
+             * "tied" --- all states use **the same** full covariance matrix.
+ 
+         min_covar : float, optional
+-            Floor on the diagonal of the covariance matrix to prevent
+-            overfitting. Defaults to 1e-3.
++            Floor on the covariance to prevent overfitting, applied at
++            initialisation and after every M-step: variances (spherical,
++            diag) and eigenvalues (full, tied) never fall below it.
++            Defaults to 1e-3.
+ 
+         startprob_prior : array, shape (n_components, ), optional
+             Parameters of the Dirichlet prior distribution for
+@@ -386,6 +414,12 @@
+                     self._covars_ = ((covars_prior + c_n) /
+                                      (cvweight + stats['post'][:, None, None]))
+ 
++            # Keep the documented floor after every update, not only at
++            # initialisation: a state that captures exactly repeated values
++            # would otherwise shrink its variance towards zero.
++            self._covars_ = _floor_covars(
++                self._covars_, self.covariance_type, self.min_covar)
++
+ 
+ class GMMHMM(_emissions.BaseGMMHMM):
+     """
+--- /dev/null
++++ b/src/hmmlearn/tests/test_gaussian_hmm_min_covar.py
+@@ -0,0 +1,72 @@
++import numpy as np
++from numpy.testing import assert_allclose
++import pytest
++
++from .. import hmm
++
++
++def _rounded_sequences(n_sequences=1000, length=7, scale=0.5, seed=0):
++    # Rounded Gaussian increments: about two thirds are exactly zero, so
++    # one state can explain the zeros with a vanishing variance.
++    rng = np.random.RandomState(seed)
++    X = np.round(rng.normal(0, scale, (n_sequences, length)))
++    return X.reshape(-1, 1), np.full(n_sequences, length)
++
++
++@pytest.mark.parametrize("covariance_type", ["spherical", "diag"])
++def test_min_covar_is_a_floor_after_fit(covariance_type):
++    X, lengths = _rounded_sequences()
++    h = hmm.GaussianHMM(2, covariance_type, min_covar=1e-3, n_iter=100,
++                        tol=1e-4, random_state=0)
++    h.fit(X, lengths)
++    assert h._covars_.min() >= 1e-3
++
++
++@pytest.mark.parametrize("covariance_type", ["full", "tied"])
++def test_min_covar_floors_eigenvalues(covariance_type):
++    rng = np.random.RandomState(1)
++    # The second feature is an exact copy of the first: a singular
++    # covariance without the floor.
++    x = np.round(rng.normal(0, 0.5, 3000))
++    X = np.column_stack([x, x])
++    h = hmm.GaussianHMM(2, covariance_type, min_covar=1e-3, n_iter=50,
++                        random_state=0)
++    h.fit(X, [300] * 10)
++    covs = h.covars_
++    eig = np.linalg.eigvalsh(covs)
++    assert eig.min() >= 1e-3 * (1 - 1e-9)
++
++
++@pytest.mark.parametrize("covariance_type",
++                         ["spherical", "diag", "full", "tied"])
++def test_min_covar_monotone_em(covariance_type):
++    X, lengths = _rounded_sequences(n_sequences=200)
++    h = hmm.GaussianHMM(2, covariance_type, min_covar=1e-2, n_iter=30,
++                        tol=-np.inf, random_state=0)
++    h.fit(X, lengths)
++    history = np.asarray(h.monitor_.history)
++    assert (np.diff(history) >= -1e-8 * np.abs(history[1:])).all()
++
++
++@pytest.mark.parametrize("covariance_type",
++                         ["spherical", "diag", "full", "tied"])
++def test_min_covar_inactive_floor_changes_nothing(covariance_type):
++    # From the same starting point, a floor that never binds gives exactly
++    # the fit without a floor (min_covar=0 disables it).
++    rng = np.random.RandomState(2)
++    X = np.concatenate([rng.normal(0, 1, (500, 2)),
++                        rng.normal(4, 2, (500, 2))])
++    start = hmm.GaussianHMM(2, covariance_type, random_state=0)
++    start._init(X)
++    fits = []
++    for min_covar in (1e-3, 0.0):
++        h = hmm.GaussianHMM(2, covariance_type, min_covar=min_covar,
++                            n_iter=20, init_params="", random_state=0)
++        h.startprob_ = start.startprob_
++        h.transmat_ = start.transmat_
++        h.means_ = start.means_
++        h.covars_ = start._covars_
++        fits.append(h.fit(X))
++    assert np.linalg.eigvalsh(fits[0].covars_).min() > 1e-2
++    assert_allclose(fits[0].means_, fits[1].means_, rtol=0, atol=0)
++    assert_allclose(fits[0].covars_, fits[1].covars_, rtol=0, atol=0)
