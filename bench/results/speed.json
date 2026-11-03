@@ -1,0 +1,39 @@
+{
+  "hmmlearn": "0.3.3",
+  "numpy": "2.5.4",
+  "python": "3.12.3",
+  "machine": "x86_64",
+  "threads": 1,
+  "rows": [
+    {
+      "n_sequences": 1000,
+      "segments": 5,
+      "n_iter": 10,
+      "batched_s": 0.089,
+      "hmmlearn_s": 3.68,
+      "speedup": 41.2,
+      "max_rel_param_diff": 4.402883020154288e-14,
+      "max_rel_loglik_diff": 1.2260145037083548e-15
+    },
+    {
+      "n_sequences": 10000,
+      "segments": 5,
+      "n_iter": 10,
+      "batched_s": 0.286,
+      "hmmlearn_s": 39.718,
+      "speedup": 138.7,
+      "max_rel_param_diff": 5.855754334282856e-14,
+      "max_rel_loglik_diff": 4.837959437689536e-15
+    },
+    {
+      "n_sequences": 100000,
+      "segments": 5,
+      "n_iter": 10,
+      "batched_s": 3.17,
+      "hmmlearn_s": 416.553,
+      "speedup": 131.4,
+      "max_rel_param_diff": 2.4270641566347994e-13,
+      "max_rel_loglik_diff": 1.2515280173050919e-14
+    }
+  ]
+}
