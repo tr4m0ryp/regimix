@@ -209,16 +209,5 @@ Yahoo Finance daily closes and the M4 hourly files. Raw held-out predictions go 
 
 ## License
 
-regimix is **source-available**, licensed under the [PolyForm Noncommercial License 1.0.0](./LICENSE), **not** an
-OSI open-source license.
-
-- **You may** use, modify, fork, and share regimix freely for any **noncommercial** purpose, as long as you keep the
-  copyright and `Required Notice:` lines (see [`NOTICE`](./NOTICE)) and credit *"regimix by Keygraph, Inc."*
-- **You may not** sell it, bundle it into a paid product, or run it as a paid/hosted service **without a commercial
-  license**.
-
-**Exception:** the two patch files `patches/hmmlearn/*.patch` modify hmmlearn source and stay under hmmlearn's
-BSD 3-Clause license ([`patches/hmmlearn/LICENSE`](./patches/hmmlearn/LICENSE)), so they can go upstream. The
-`regimix` package itself copies no hmmlearn code; it imports hmmlearn as a dependency.
-
-Copyright (c) 2026 Keygraph, Inc. Commercial licensing enquiries: see [`NOTICE`](./NOTICE).
+Apache License 2.0: free to use, modify and redistribute, including commercially. See [LICENSE](LICENSE)
+and [NOTICE](NOTICE). The two files in `patches/hmmlearn/` modify hmmlearn and stay under hmmlearn's BSD 3-Clause license ([`patches/hmmlearn/LICENSE`](patches/hmmlearn/LICENSE)). Copyright 2026 Moussa Ouallaf, Husimi.ai (moussa@husimi.ai).
