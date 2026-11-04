@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://x.com/tr4m0ryp"><img alt="Follow on X" src="https://img.shields.io/badge/X-@tr4m0ryp-000000?logo=x&logoColor=white"></a>
-  <a href="paper/regimix.pdf"><img alt="Paper PDF" src="https://img.shields.io/badge/Paper-PDF-b31b1b?logo=adobeacrobatreader&logoColor=white"></a>
+  <a href="paper/regimix.pdf"><img alt="Technical note" src="https://img.shields.io/badge/Technical%20note-PDF-b31b1b?logo=adobeacrobatreader&logoColor=white"></a>
 </p>
 
 **Two hmmlearn 0.3.3 fixes (a silent variance collapse in the M-step, the wrong shape of spherical `covars_`), a
@@ -106,7 +106,7 @@ p_i = \mathrm{sigmoid}\big(a + b\,\mathrm{logit}\tilde p_i\big)
   refitted on all training rows. Labels enter only here.
 - **Variance floor:** hmmlearn 0.3.3 applies `min_covar` only at initialisation, so on data with many exact zeros
   one state collapses onto a spike and its posterior becomes a one-bit gate. `FlooredGaussianHMM` applies it
-  after every M-step, which is the exact constrained maximiser, so EM stays monotone (proof in the paper):
+  after every M-step, which is the exact constrained maximiser, so EM stays monotone (proof in the technical note):
 
 ```math
 v_j \leftarrow \max\!\left(v_j^{\mathrm{EM}},\, m\right)
@@ -187,8 +187,8 @@ python -m venv .venv && .venv/bin/pip install -e ".[test]" matplotlib
 PY=.venv/bin/python bash bench/run_all.sh        # all three benchmarks + variants, about 1 h on 2 threads
 .venv/bin/python -m bench.run_speed              # batched fit against hmmlearn, about 8 min on 1 thread
 for d in fx eq m4; do .venv/bin/python -m paper.results.ablate_calib $d; done   # calibration ablation
-.venv/bin/python paper/results/make_numbers.py   # paper numbers from bench/results
-.venv/bin/python paper/figures/make.py           # paper figures
+.venv/bin/python paper/results/make_numbers.py   # note numbers from bench/results
+.venv/bin/python paper/figures/make.py           # note figures
 ```
 
 Data downloads to `$REGIMIX_DATA` (default `../_data`, outside the repo): HistData EUR/USD 1-minute bars,
@@ -197,13 +197,14 @@ Yahoo Finance daily closes and the M4 hourly files. Raw held-out predictions go 
 ## Cite
 
 ```bibtex
-@misc{ouallaf2026regimix,
-  author = {Ouallaf, Moussa},
-  organization = {Husimi.ai},
-  title  = {Regime-mixture exceedance probabilities from a partly observed path, with collapse diagnostics},
-  year   = {2026},
-  howpublished = {\url{https://github.com/tr4m0ryp/regimix}},
-  note   = {Paper: paper/regimix.pdf}
+@techreport{ouallaf2026regimix,
+  author      = {Ouallaf, Moussa},
+  institution = {Husimi.ai},
+  type        = {Technical note},
+  title       = {Regime-mixture exceedance probabilities from a partly observed path, with collapse diagnostics},
+  year        = {2026},
+  url         = {https://github.com/tr4m0ryp/regimix/blob/main/paper/regimix.pdf},
+  note        = {Preprint, not peer-reviewed}
 }
 ```
 

@@ -27,7 +27,7 @@
 
 \input{results/numbers.tex}
 
-\title{Regime-mixture exceedance probabilities from a partly observed path, with collapse diagnostics}
+\title{Regime-mixture exceedance probabilities from a partly observed path, with collapse diagnostics\\[6pt]{\normalsize\normalfont Technical note (preprint, not peer-reviewed)}}
 
 \author{%
   Moussa Ouallaf \\
@@ -229,6 +229,11 @@ The idea lost a comparison and stays open: a realised-volatility probit reads th
 To beat it, the states must carry what the level misses, such as a switch inside the horizon \citep{hardy2001}, which regimix does not model.
 The evidence is thin: three datasets, one held-out period each, \nFxSeeds{} seeds, post-hoc variants on that period, a floor and a speed-up measured only on synthetic data (one machine), survivorship bias in the equities, a drift unit mismatch (Appendix~\ref{app:variants}), and no ablation of fitting one HMM on all episodes.
 
+\section*{Generative AI acknowledgement}
+Generative AI is becoming part of how research is designed, carried out and written up. Readers should know where it was used, so we state it plainly. Generative AI was used throughout this project: to write and review code, to run and check the experiments, and to draft and revise this note. We used only Anthropic's Claude models. Every result reported here comes from code in the accompanying repository and can be reproduced from it.
+
+Statements like this one are still free text, and no two papers word them alike. We are developing a general checklist for reporting generative AI use, in the spirit of the CRediT taxonomy \citep{brand2015credit}, which lists each author's contribution through a fixed set of roles. It will cover the ways AI enters a project, from coding assistance and brainstorming to fully autonomous execution, so that researchers can state their use in a short, comparable form. Once published, the checklist will be added to this section.
+
 \bibliographystyle{plainnat}
 \bibliography{refs}
 
@@ -407,6 +412,6 @@ The batched fit is \nSpeedA$\times$ faster on 1,000 sequences, \nSpeedB$\times$ 
 Package, benchmark and paper live in the \texttt{regimix} repository; the benchmark results in \texttt{bench/results/} are from commit \texttt{a6e9ca4}, and \texttt{speed.json} was added later without changing them.
 The whole delta to upstream is \texttt{patches/hmmlearn/0001-gaussianhmm-apply-min-covar-after-every-m-step.patch} (and a spherical-shape fix, \texttt{0002}) against hmmlearn 0.3.3, with repro tests in \texttt{patches/hmmlearn/tests}.
 \texttt{bash bench/run\_all.sh} downloads the data and writes \texttt{bench/results/\{fx,eq,m4\}[\_variants].json} (about 1 hour on 2 threads);
-\texttt{python -m paper.results.ablate\_calib \{fx,eq,m4\}} writes the calibration ablation to \texttt{paper/results/calib\_*.json}, \texttt{python results/make\_numbers.py} regenerates every number in this paper and \texttt{python figures/make.py} both figures (Figure~\ref{fig:reliability} reads the held-out predictions the benchmark stores outside git).
+\texttt{python -m paper.results.ablate\_calib \{fx,eq,m4\}} writes the calibration ablation to \texttt{paper/results/calib\_*.json}, \texttt{python results/make\_numbers.py} regenerates every number in this note and \texttt{python figures/make.py} both figures (Figure~\ref{fig:reliability} reads the held-out predictions the benchmark stores outside git).
 
 \end{document}
