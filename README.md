@@ -89,14 +89,14 @@ $`\tau_i > 0`$. The label is $`y_i = \mathbf{1}\{X(t_i+\tau_i) > k_i\}`$. With l
 $`0 = e_0 < e_1 < \dots < e_S`$:
 
 ```math
-z_{i,s} = \operatorname{clip}\!\left(\frac{X(t_i-e_{s-1})-X(t_i-e_s)}{\sqrt{e_s-e_{s-1}}},\,-c,\,c\right), \qquad
+z_{i,s} = \mathrm{clip}\!\left(\frac{X(t_i-e_{s-1})-X(t_i-e_s)}{\sqrt{e_s-e_{s-1}}},\,-c,\,c\right), \qquad
 w_i = \alpha_{i,S}\,A, \qquad \alpha_{i,S}(j) = P(r_S = j \mid z_{i,1},\dots,z_{i,S})
 ```
 
 ```math
 \tilde p_i = \sum_{j=1}^{K} w_i(j)\,\Phi\!\left(\frac{d_i+\mu_j\tau_i}{\max(\sigma_j,\sigma_{\min})\sqrt{\tau_i}}\right),
 \qquad d_i = X(t_i)-k_i, \qquad
-p_i = \operatorname{sigmoid}\big(a + b\,\operatorname{logit}\tilde p_i\big)
+p_i = \mathrm{sigmoid}\big(a + b\,\mathrm{logit}\tilde p_i\big)
 ```
 
 - **HMM:** $`K`$ Gaussian states fitted by Baum-Welch on the segment sequences of all episodes, without labels;
@@ -119,7 +119,7 @@ v_j \leftarrow \max\!\left(v_j^{\mathrm{EM}},\, m\right)
 \rho = \frac{\min_j v_j}{m}, \qquad D_j = \frac{1}{1-A_{jj}}, \qquad R = \frac{\max_j \sigma_j}{\min_j \sigma_j}
 ```
 
-The estimator also returns $`w_i`$ and $`\operatorname{logit}\tilde p_i`$ for use as inputs to another learner.
+The estimator also returns $`w_i`$ and $`\mathrm{logit}\tilde p_i`$ for use as inputs to another learner.
 The filter and the regime-weighted normal tail are known (Hamilton 1989; Hardy 2001). What is new here is
 engineering: the two hmmlearn fixes, the batched fit and the diagnostics. The out-of-fold calibration is a
 design choice with no clear measured gain over in-sample Platt (mixed sign, at most 0.0008 nats).
